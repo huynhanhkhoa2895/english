@@ -23,11 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-// echo "<pre>";
-// print_r($_SERVER);
-// echo "</pre>";
-$config['base_url']  =  ($_SERVER['SERVER_PORT'] == 80 ? "http" : "https")."://".$_SERVER['SERVER_NAME'];
-// $config['base_url'] .= preg_replace('@/+$@', '', dirname($_SERVER['SCRIPT_NAME'])).'/';
+$config['base_url'] = '';
+
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -38,7 +35,7 @@ $config['base_url']  =  ($_SERVER['SERVER_PORT'] == 80 ? "http" : "https")."://"
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '';
+$config['index_page'] = 'index.php';
 
 /*
 |--------------------------------------------------------------------------
