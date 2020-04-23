@@ -28,22 +28,33 @@ class Home extends CI_Controller{
         $current_exercise = $this->Model->getTable('exercise',['id'=>$id]);
         $data['name'] = $current_exercise->name;
         $data['lession'] = $current_exercise->lession;
+        $data['type'] = $current_exercise->type;
         $arrVol = [];
         $arrPharse = [];
         $arr = [];
-        foreach($data['exercises'] as $it){
-            if($it['class'] == 'vocabulary'){
-                $arrVol[] = $it['vocabulary_id'];
-            }else{
-                $arrPharse[] = $it['vocabulary_id'];
-            }
+        switch($data['type']){
+            case "vocabulary":
+                foreach($data['exercises'] as $it){
+                    if($it['class'] == 'vocabulary'){
+                        $arrVol[] = $it['vocabulary_id'];
+                    }else{
+                        $arrPharse[] = $it['vocabulary_id'];
+                    }
+                }
+                if(!empty($arrVol)){
+                    $arr=array_merge($arr,$this->Model->query("vocabulary",["where_in"=>["id"=> $arrVol],"select"=>"id,e_name,v_name,type"]));
+                }
+                if(!empty($arrPharse)){
+                    $arr=array_merge($arr,$this->Model->query("pharse",["where_in"=>["id"=> $arrPharse],"select"=>"id,e_name,v_name"]));
+                }
+            break;
+            case "communication":
+                foreach($data['exercises'] as $it){
+                    
+                }
+            break;
         }
-        if(!empty($arrVol)){
-            $arr=array_merge($arr,$this->Model->query("vocabulary",["where_in"=>["id"=> $arrVol],"select"=>"id,e_name,v_name,type"]));
-        }
-        if(!empty($arrPharse)){
-            $arr=array_merge($arr,$this->Model->query("pharse",["where_in"=>["id"=> $arrPharse],"select"=>"id,e_name,v_name"]));
-        }
+
         $data['test'] = $this->randomExercise($arr);
         $data['exercise'] = $id;
         $this->load->view('load_exercise_detail',$data);

@@ -158,7 +158,7 @@ class Index extends CI_Controller{
         }elseif($type == "communication"){
             foreach($this->Model->query('communication',["select"=>"id,e_name,v_name","whereArray"=>["student_id"=>$this->session->userdata("id")],"order_by"=>$sort]) as $it){
                 $new_arr['id'] = $it['id'];
-                $new_arr['class'] = '';
+                $new_arr['class'] = 'communication';
                 $new_arr['e_name'] = $it['e_name'];
                 $new_arr['v_name'] = $it['v_name'];
                 $arr[]=$new_arr;

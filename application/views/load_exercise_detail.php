@@ -8,31 +8,56 @@
     <section class="container body-section">
         <h3>Bài <?=$name?></h3>
         <hr/>
-        <div class="test-container">
-            <?php foreach($test as $key=>$t){ ?>                
-                <div data-stt="<?=$key?>" data-id="<?=$t['id']?>" data-last="<?=count($test)-1?>" data-e="<?=$t['e_name']?>" data-v="<?=$t['v_name']?>" data-type="<?php if(!empty($t['type'])) echo $t['type'];?>" data-class="<?php if(!empty($t['type'])) echo 'vocabulary'; else echo 'pharse' ?>" class="row test-content <?php if($key == 0) echo "active"; ?>">
-                    <div class="col-2">
-                        <h4>Câu <?=$key+1?></h4>
+        <?php if($type=="vocabulary"){ ?>
+            <div class="test-container">
+                <?php foreach($test as $key=>$t){ ?>                
+                    <div data-stt="<?=$key?>" data-id="<?=$t['id']?>" data-last="<?=count($test)-1?>" data-e="<?=$t['e_name']?>" data-v="<?=$t['v_name']?>" data-type="<?php if(!empty($t['type'])) echo $t['type'];?>" data-class="<?php if(!empty($t['type'])) echo 'vocabulary'; else echo 'pharse' ?>" class="row test-content <?php if($key == 0) echo "active"; ?>">
+                        <div class="col-2">
+                            <h4>Câu <?=$key+1?></h4>
+                        </div>
+                        <div class="col-4">
+                            <h4>
+                                <?php if(empty($isListen)){ ?>
+                                    <?=$t['v_name']?> <?php if(!empty($t['type'])) echo '('.$t['type'].')';?>
+                                <?php }else{ ?>
+                                    <?=$this->myfunction->speakEnglish($t['e_name'])?>
+                                <?php } ?>
+                            </h4>
+                        </div>
+                        <div class="col-4">
+                            <p><input data-id="<?=$t['id']?>" autocomplete="off" name="input-<?=$t['id']?>-<?php if(!empty($t['type'])) echo 'vocabulary'; else echo 'pharse' ?>" id="input-vocabulary-<?=$t['id']?>" class="input-vocabulary form-control"></p>
+                            <p><button id="btn-vocabulary-<?=$t['id']?>" onclick="nextExercise(this)" type="button" class="btn btn-primary">Tiếp tục</button></p>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <h4>
-                            <?php if(empty($isListen)){ ?>
-                                <?=$t['v_name']?> <?php if(!empty($t['type'])) echo '('.$t['type'].')';?>
-                            <?php }else{ ?>
-                                <?=$this->myfunction->speakEnglish($t['e_name'])?>
-                            <?php } ?>
-                        </h4>
+                <?php } ?>
+            </div>
+            <div class="test-result">
+                <div style="" class="result"></div>
+            </div>
+        <?php }else{ ?>
+            <div class="test-container">
+                <?php foreach($test as $key=>$t){ ?>                
+                    <div data-stt="<?=$key?>" data-id="<?=$t['id']?>" data-last="<?=count($test)-1?>" data-e="<?=$t['e_name']?>" data-v="<?=$t['v_name']?>" data-type="<?php if(!empty($t['type'])) echo $t['type'];?>" data-class="<?php if(!empty($t['type'])) echo 'vocabulary'; else echo 'pharse' ?>" class="row test-content <?php if($key == 0) echo "active"; ?>">
+                        <div class="col-2">
+                            <h4>Câu <?=$key+1?></h4>
+                        </div>
+                        <div class="col-4">
+                            <h4>
+                                <span class=""><?=$t['v_name']?> <?php if(!empty($t['type'])) echo '('.$t['type'].')';?></span>
+                                <?=$this->myfunction->speakEnglish($t['e_name'])?>                                    
+                            </h4>
+                        </div>
+                        <div class="col-4">
+                            <div>
+                                <textarea data-id="<?=$t['id']?>" autocomplete="off" id="input-vocabulary-<?=$t['id']?>" class="input-vocabulary form-control">
+                                </textarea>
+                            </div>
+                            <div><button id="btn-vocabulary-<?=$t['id']?>" onclick="nextExercise(this)" type="button" class="btn btn-primary">Tiếp tục</button></div>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <p><input data-id="<?=$t['id']?>" autocomplete="off" name="input-<?=$t['id']?>-<?php if(!empty($t['type'])) echo 'vocabulary'; else echo 'pharse' ?>" id="input-vocabulary-<?=$t['id']?>" class="input-vocabulary form-control"></p>
-                        <p><button id="btn-vocabulary-<?=$t['id']?>" onclick="nextExercise(this)" type="button" class="btn btn-primary">Tiếp tục</button></p>
-                    </div>
-                </div>
-            <?php } ?>
-        </div>
-        <div class="test-result">
-            <div style="" class="result"></div>
-        </div>
+                <?php } ?>
+            </div>
+        <?php } ?>
         <div class="test-button row">
             <div class="col-4">
                 <?php if(!empty($lession)){ ?>
