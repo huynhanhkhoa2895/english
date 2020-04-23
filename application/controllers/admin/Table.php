@@ -18,6 +18,10 @@ class Table extends CI_Controller
                 $data=$this->Model->getAllTable($it['href'],$limit,$start,"created_at DESC",["active"=>1]);
                 $total = $this->Model->getTotal($it['href']);
                 break;
+            case 'communication' :
+                $data=$this->Model->getAllTable($it['href'],$limit,$start,"created_at DESC",["student_id"=>$this->session->userdata("id")]);
+                $total = $this->Model->getTotal($it['href']);
+                break;
             case 'read' :
                 $data=$this->Model->getAllTable($it['href'],$limit,$start,"created_at DESC",["student"=>$this->session->userdata("id")]);
                 $total = $this->Model->getTotal($it['href']);
@@ -68,6 +72,16 @@ class Table extends CI_Controller
                         "   
                             <a href='".base_url()."admin/category?action=edit&id=".$val['id']."'>Edit</a> |
                             <a onclick='confirmDelete(this)' href='javascript:void(0)' data-href='".base_url()."admin/category/delete/".$val['id']."'>Delete</a>
+                        ";
+                        $table[] = $val; 
+                    }
+                    break;
+                case 'communication' :
+                    foreach ($data as $val){
+                        $val['action'] = 
+                        "   
+                            <a href='".base_url()."admin/communication?action=edit&id=".$val['id']."'>Edit</a> |
+                            <a onclick='confirmDelete(this)' href='javascript:void(0)' data-href='".base_url()."admin/communication/delete/".$val['id']."'>Delete</a>
                         ";
                         $table[] = $val; 
                     }

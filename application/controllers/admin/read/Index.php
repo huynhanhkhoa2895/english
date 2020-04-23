@@ -7,6 +7,9 @@ class Index extends CI_Controller{
         $this->load->model('Model');
         $this->load->library('myfunction');
         $this->load->helper('form'); 
+        if(!$this->session->userdata("username")){
+            redirect('/verify', 'refresh');
+        }
     }
     function index(){
         $data['href'] = 'read';

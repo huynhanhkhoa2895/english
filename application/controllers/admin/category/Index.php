@@ -5,6 +5,9 @@ class Index extends CI_Controller{
         parent::__construct();
         $this->load->model('Model');
         $this->load->library('myfunction');
+        if(!$this->session->userdata("username")){
+            redirect('/verify', 'refresh');
+        }
     }
     function index(){
         $data['href'] = 'category';

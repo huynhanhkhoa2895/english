@@ -8,6 +8,9 @@ class Index extends CI_Controller{
         $this->load->library('myfunction');
         $this->load->helper('form');
         $this->_table = $this->uri->segment(2) == "ajax" ? $this->uri->segment(3) : $this->uri->segment(2);
+        if(!$this->session->userdata("username")){
+            redirect('/verify', 'refresh');
+        }
     }
     function index(){
         $data['href'] = $this->_table;
@@ -18,10 +21,11 @@ class Index extends CI_Controller{
     function indexAjax(){
         $action = $this->input->get('action');
         $id = $this->input->get('id');
+        $exercise_type = $this->input->get('exercise_type');
         if($action == 'list'){
             $this->loadTable();
         }elseif($action == 'add'){
-            $this->loadAdd();
+            $this->loadAdd("add","",$exercise_type);
         }elseif($action == 'edit'){
             $this->loadAdd('edit',$id);
         }elseif($action == 'createExercise'){
@@ -77,10 +81,11 @@ class Index extends CI_Controller{
         $data['header'] = array('id'=>'Bài học','name'=>'Tên bài hoc','created_at'=>'Ngày tạo','updated_at'=>'Ngày cập nhật','action'=>'Action');
         $this->load->view('admin/list',$data);
     }
-    function loadAdd($action = "",$id = ""){
+    function loadAdd($action = "",$id = "",$exercise_type = "vocabulary"){
         $data['title'] = $this->_table == 'lession' ? 'Bài học' : 'Bài tập';
         $data['action'] = 'edit';
         $data['categorys'] = $this->Model->getAllTable('category');
+        $data['exercise_type']= $exercise_type;
         $data['id'] = $id;
         $data['data'] = [];
         $data['name'] = "";
@@ -100,7 +105,7 @@ class Index extends CI_Controller{
         }
         $this->load->view('admin/lession/add',$data);
     }
-    function loadVocabulary($filter = []){
+    function loadVocabulary($filter = [],$type = "vocabulary"){
         $condition = [];        
         $arr=[];
         $class = [];
@@ -125,26 +130,37 @@ class Index extends CI_Controller{
                 else $class['vocabulary'] = true;
             }
         }
-        if(empty($class['vocabulary'])){
-            $conditionVocabulary = [];
-            if(!empty($filter['category'])) $conditionVocabulary = ['category'=>$filter['category']];
-            if(!empty($filter['type'])) $conditionVocabulary = ['type'=>$filter['type']];
-            foreach($this->Model->query('vocabulary',["select"=>"id,e_name,v_name,spell,category,type","whereArray"=>[$condition,$conditionVocabulary],"order_by"=>$sort]) as $vocabulary){
-                $new_arr['id'] = $vocabulary['id'];
-                $new_arr['class'] = 'vocabulary';
-                $new_arr['e_name'] = $vocabulary['e_name'];
-                $new_arr['v_name'] = $vocabulary['v_name'];
-                $new_arr['type'] = $vocabulary['type'];
-                $arr[]=$new_arr;
-                $new_arr = [];
+        if($type == "vocabulary"){
+            if(empty($class['vocabulary'])){
+                $conditionVocabulary = [];
+                if(!empty($filter['category'])) $conditionVocabulary = ['category'=>$filter['category']];
+                if(!empty($filter['type'])) $conditionVocabulary = ['type'=>$filter['type']];
+                foreach($this->Model->query('vocabulary',["select"=>"id,e_name,v_name,spell,category,type","whereArray"=>[$condition,$conditionVocabulary],"order_by"=>$sort]) as $vocabulary){
+                    $new_arr['id'] = $vocabulary['id'];
+                    $new_arr['class'] = 'vocabulary';
+                    $new_arr['e_name'] = $vocabulary['e_name'];
+                    $new_arr['v_name'] = $vocabulary['v_name'];
+                    $new_arr['type'] = $vocabulary['type'];
+                    $arr[]=$new_arr;
+                    $new_arr = [];
+                }
             }
-        }
-        if(empty($class['pharse'])){
-            foreach($this->Model->query('pharse',["select"=>"id,e_name,v_name","whereArray"=>$condition,"order_by"=>$sort]) as $pharse){
-                $new_arr['id'] = $pharse['id'];
-                $new_arr['class'] = 'pharse';           
-                $new_arr['e_name'] = $pharse['e_name'];
-                $new_arr['v_name'] = $pharse['v_name'];
+            if(empty($class['pharse'])){
+                foreach($this->Model->query('pharse',["select"=>"id,e_name,v_name","whereArray"=>$condition,"order_by"=>$sort]) as $pharse){
+                    $new_arr['id'] = $pharse['id'];
+                    $new_arr['class'] = 'pharse';           
+                    $new_arr['e_name'] = $pharse['e_name'];
+                    $new_arr['v_name'] = $pharse['v_name'];
+                    $arr[]=$new_arr;
+                    $new_arr = [];
+                }
+            }
+        }elseif($type == "communication"){
+            foreach($this->Model->query('communication',["select"=>"id,e_name,v_name","whereArray"=>["student_id"=>$this->session->userdata("id")],"order_by"=>$sort]) as $it){
+                $new_arr['id'] = $it['id'];
+                $new_arr['class'] = '';
+                $new_arr['e_name'] = $it['e_name'];
+                $new_arr['v_name'] = $it['v_name'];
                 $arr[]=$new_arr;
                 $new_arr = [];
             }
@@ -153,7 +169,7 @@ class Index extends CI_Controller{
     }
     function loadTableVocabulary(){
         $data['vocabulary'] = [];
-        $data['vocabulary'] = $this->loadVocabulary($this->input->post('filter'));   
+        $data['vocabulary'] = $this->loadVocabulary($this->input->post('filter'),$this->input->post('exercise_type'));   
         $this->load->view('admin/lession/table-vocabulary',$data);
     }
     function randomLession(){
@@ -210,6 +226,8 @@ class Index extends CI_Controller{
         $name = $this->input->post('name');
         $table = $this->input->post('table');
         $id_current = $this->input->post('id');
+        $exercise_type = $this->input->post('exercise_type');
+        
         if(!empty($id_current)){
             $this->Model->update($table,['name'=>$name,'count'=>count($data),"student"=>$this->session->userdata("id")],["id"=>$id_current]);
             $this->Model->delete($table.'_detail',["id"=>$id_current]);
@@ -218,7 +236,7 @@ class Index extends CI_Controller{
             }
             echo json_encode(array("err"=>0,"msg"=>"Update thành công","action"=>"edit"));
         }else{
-            $id = $this->Model->insert($table,['name'=>$name,'count'=>count($data),"student"=>$this->session->userdata("id")]);
+            $id = $this->Model->insert($table,['name'=>$name,'count'=>count($data),"student"=>$this->session->userdata("id"),"type"=>$exercise_type]);
             foreach($data as $it){
                 $this->Model->insert($table.'_detail',['class'=>$it['class'],'vocabulary_id'=>$it['id'],'id'=>$id]);
             }

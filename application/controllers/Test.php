@@ -7,7 +7,7 @@ class Test extends CI_Controller{
         $this->load->library('myfunction');
     }
     function index(){
-        return $this->custom_sort(array(9, 2, 18, 34, 3, 10, 15),"desc");
+        return $this->load->view("test.php");
     }
     function custom_sort($array,$type="esc"){
         $count = count($array);

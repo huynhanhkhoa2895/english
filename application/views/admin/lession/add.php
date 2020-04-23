@@ -139,6 +139,7 @@
     id_lession = '<?=$id?>';
     var start = moment().subtract(29, 'days');
     var end = moment();
+    var exercise_type = "<?=$exercise_type?>";
     <?php if(!empty($id)){ ?>        
         <?php foreach($data as $it){ ?>
             list_vocabulary.push({id : <?=$it['id']?>,class : '<?php if(!empty($it['type'])) echo "vocabulary"; else echo "pharse"?>'});
@@ -151,8 +152,8 @@
         $(".table-vocabulary,.content-table-result").slimScroll({
             height : 'calc(100% - 100px)'
         });
-        loadTableVocabularyIn();        
-        $(document).on("click",".row-vocabulary",function(){
+        loadTableVocabularyIn({},exercise_type);        
+        $(document).on("click",".row-vocabulary",function(event){
             let data = {};        
             data = $(this).data();
             let check = true;
@@ -168,6 +169,7 @@
                     return false;
                 }
             })
+            console.log(check)
             if(!check) return false;
             list_vocabulary.push({id : data.id,class : data.class})
             let html =
@@ -179,6 +181,9 @@
             `;
             $(".count-vocabulary-in").html(list_vocabulary.length);
             $("#content-table-result").append(html);
+            event.stopImmediatePropagation();
+            event.stopPropagation()
+            event.preventDefault()
         })  
         $(document).on("click",".content-table-result tr",function(){
             let tr = $(this)[0];
@@ -204,7 +209,7 @@
             $(".table-vocabulary").data('date',start.format('YYYY-MM-DD')+'_'+end.format('YYYY-MM-DD'));
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
-            loadTableVocabularyIn();
+            loadTableVocabularyIn({},exercise_type);
         });
         $("#check-disable-date").on("click",function(){
             let it = $(this)[0];
@@ -215,17 +220,17 @@
                 $("#daterange-input").prop("disabled",false)
                 $(".table-vocabulary").data('date',startDate+'_'+endDate);
             }
-            loadTableVocabularyIn();
+            loadTableVocabularyIn({},exercise_type);
         })
     })
-    function loadTableVocabularyIn(data = {}){  
+    function loadTableVocabularyIn(data = {},exercise_type = "vocabulary"){  
         data['vocabulary'] = $(".table-vocabulary").data('vocabulary');
         data['class'] = $(".table-vocabulary").data('class');
         data['type'] = $(".table-vocabulary").data('type');
         data['category'] = $(".table-vocabulary").data('category');
         data['sort'] = $(".table-vocabulary").data('sort');
         data['date'] = $(".table-vocabulary").data('date');
-        $('.table-vocabulary').load(url+'admin/ajax/lession/loadtable',{filter : data})
+        $('.table-vocabulary').load(url+'admin/ajax/lession/loadtable',{filter : data,exercise_type : exercise_type})
     }    
     function add(table = "exercise"){
         let arr = [];
@@ -238,7 +243,7 @@
             })
             return false;
         }   
-        $.post(url+`admin/lession/index/add`,{data : list_vocabulary,name : $("#name-lession").val(),id : id_lession,table : table},function(kq){
+        $.post(url+`admin/lession/index/add`,{data : list_vocabulary,name : $("#name-lession").val(),id : id_lession,table : table,exercise_type : exercise_type},function(kq){
             reset("lession");
             let res = $.parseJSON(kq);
             if(res.err == 0){

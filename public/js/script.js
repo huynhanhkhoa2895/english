@@ -24,23 +24,38 @@ function loadAjax(action,href,id="") {
         $("#loading").hide();
     });
 }
-function loadAjaxDefault(action,id="") {
+function loadAjaxDefault(action,id="",option = {}) {
+    let done = true;
+    let newOption = {};
     href = $('.body-left li.active').data('href')
-    $("#loading").show();
-    $.ajax({
-        method : 'get',
-        type : 'get',
-        url : url+'admin/ajax/'+href,
-        data : {action : action,id : id},
-        success : function (kq) {
-            $('.body-right .section-content').html(kq);
-            rewrite_url = url+"admin/"+href+"?action="+action;
-            if(id != "") rewrite_url += `&id=${id}`;
-            window.history.pushState(null, null,rewrite_url);
-        }
-    }).done(function () {
-        $("#loading").hide();
-    });
+    if(option.exercise_type){
+        $('#ContentSelectExerciseType').on('shown.bs.modal', function (e) {
+            $("#ContentSelectExerciseType").modal('hide');
+        })
+        newOption = {exercise_type : $("#selectTypeExercise").val()}
+    }
+    if(done){
+        $("#loading").show();
+        let data = {action : action,id : id,...newOption};
+        console.log(data)
+        $.ajax({
+            method : 'get',
+            type : 'get',
+            url : url+'admin/ajax/'+href,
+            data : data,
+            success : function (kq) {
+                $('#ContentSelectExerciseType').modal('hide')
+                $('.body-right .section-content').html(kq);
+                rewrite_url = url+"admin/"+href+"?action="+action;
+                if(id != "") rewrite_url += `&id=${id}`;
+                if(newOption.exercise_type != null && newOption.exercise_type != "") rewrite_url += `&exercise_type=${newOption.exercise_type}`;
+                window.history.pushState(null, null,rewrite_url);
+            }
+        }).done(function () {
+            $("#loading").hide();
+        });
+    }
+
 }
 function uploadExcel(it) {
     let formData = new FormData($(it)[0]);

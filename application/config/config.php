@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // print_r($_SERVER);
 // echo "</pre>";
 $config['base_url']  =  ($_SERVER['SERVER_PORT'] == 80 ? "http" : "https")."://".$_SERVER['SERVER_NAME'];
-// $config['base_url'] .= preg_replace('@/+$@', '', dirname($_SERVER['SCRIPT_NAME'])).'/';
+$config['base_url'] .= preg_replace('@/+$@', '', dirname($_SERVER['SCRIPT_NAME'])).'/';
 /*
 |--------------------------------------------------------------------------
 | Index File

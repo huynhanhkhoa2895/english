@@ -57,6 +57,11 @@ $route['admin/category'] = 'admin/category/index';
 $route['admin/ajax/category'] = 'admin/category/index/indexAjax';
 $route["admin/category/delete/:num"] = 'admin/category/index/delete/:num';
 
+$route['admin/communication'] = 'admin/communication/index';
+$route['admin/ajax/communication'] = 'admin/communication/index/indexAjax';
+$route["admin/communication/delete/:num"] = 'admin/communication/index/delete/:num';
+$route['admin/communication/edit/:num'] = 'admin/communication/index/edit';
+
 $route['admin/vocabulary'] = 'admin/vocabulary/index';
 $route['admin/ajax/vocabulary'] = 'admin/vocabulary/index/indexAjax';
 
