@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Index extends CI_Controller{
     private $uploadPath = './public/';
+    private $_table = "pharse";
     function __construct(){
         parent::__construct();
         $this->load->model('Model');
@@ -14,14 +15,18 @@ class Index extends CI_Controller{
     function index(){
         $data['href'] = 'pharse';
         $data['action'] = $this->input->get('action');
+        $data['id'] = $this->input->get('id');
         $this->load->view('admin/admin',$data);
     }
     function indexAjax(){
         $action = $this->input->get('action');
+        $id =  $this->input->get('id');
         if($action == 'list'){
             $this->loadTable();
         }elseif($action == 'add'){
             $this->loadAdd();
+        }elseif($action == 'edit'){
+            $this->loadAdd($action,$id);
         }
     }
     function loadTable(){
@@ -30,10 +35,18 @@ class Index extends CI_Controller{
         $data['header'] = array('id'=>'Cụm từ','e_name'=>'Tiếng Anh','v_name'=>'Tiếng Việt','action'=>'Action');
         $this->load->view('admin/list',$data);
     }
-    function loadAdd(){
+    function loadAdd($action="add",$id=""){
         $data['title'] = 'Từ vựng';
         $data['categorys'] = $this->Model->getAllTable('category');
-        $this->load->view('admin/pharse/add',$data);
+        $data['id'] = $id;
+        $data['e_name'] = "";
+        $data['v_name'] = "";
+        if(!empty($id)){
+            $value = $this->Model->getTable($this->_table,["id"=>$id]);
+            $data['e_name'] = $value->e_name;
+            $data['v_name'] = $value->v_name;
+        }
+        return $this->load->view('admin/pharse/add',$data);
     }
     function postExcel(){        
         if(isset($_FILES['fileExcel'])){
@@ -100,18 +113,24 @@ class Index extends CI_Controller{
         }
         $arr['e_name'] =strtolower(trim($this->input->post('e_name')));
         $arr['v_name'] =strtolower(trim($this->input->post('v_name')));
+        $action = empty($this->input->post("id")) ? "add" : "edit";
         if($this->myfunction->isSpecialChar($arr['e_name'])){
             echo json_encode(array("err"=>1,"msg"=> "Không thể có ký tự đặc biệt"));
             return;
         }
-        $this->myfunction->createFileSpeakEnglish($arr['e_name']);
-        if($this->Model->isEmptyPharse($arr['e_name'])){
-            $this->Model->insert("pharse",$arr);
-            echo json_encode(array("err"=>0,"msg"=> "Thêm cụm từ thành công"));
+        if($this->Model->isEmptyPharse($arr['e_name'],$action,$this->input->post("id"))){
+            if(empty($this->input->post("id"))){
+                $this->Model->insert("pharse",$arr);
+                $this->myfunction->createFileSpeakEnglish($arr['e_name']);
+                echo json_encode(array("err"=>0,"msg"=> "Thêm từ vựng thành công"));
+            }else{
+                $this->Model->update("pharse",$arr,["id"=>$this->input->post("id")]);
+                echo json_encode(array("err"=>0,"msg"=> "Cập nhật từ vựng thành công"));
+            }
+
         }else{
-            echo json_encode(array("err"=>1,"msg"=> "Cụm từ này đã tồn tại"));
+            echo json_encode(array("err"=>1,"msg"=> "Từ này đã tồn tại"));
         }
-        
         
     }
 }

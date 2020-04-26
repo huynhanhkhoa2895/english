@@ -127,7 +127,11 @@ class Table extends CI_Controller
                     break;
                 case 'pharse' :
                     foreach ($data as $val){
-                        $val['action'] ="<a href='".base_url()."edit/".$val['id']."'>Edit</a>";
+                        $val['action'] = 
+                        "
+                            <a href='".base_url()."admin/pharse?action=edit&id=".$val['id']."'>Edit</a> |
+                            <a onclick='confirmDelete(this)' href='javascript:void(0)' data-href='".base_url()."admin/pharse/delete/".$val['id']."'>Delete</a>
+                        ";
                         $val['e_name'] .= $this->myfunction->speakEnglish($val['e_name']);
                         $table[] = $val;                         
                     }

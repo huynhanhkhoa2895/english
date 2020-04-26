@@ -128,8 +128,14 @@ class Model extends CI_Model{
         }
 
     }
-    public function isEmptyPharse($pharse){
-        if(empty($this->db->get_where('pharse',['e_name'=>$pharse])->first_row())) return true;
-        else return false;
+    public function isEmptyPharse($pharse,$action="add",$id=""){
+        if($action=="add"){
+            if(empty($this->db->get_where('pharse',['e_name'=>$pharse])->first_row())) return true;
+            else return false;
+        }else{
+            if(empty($this->db->get_where('pharse',['e_name'=>$pharse,"id !="=>$id])->first_row())) 
+                return true;
+            else return false;
+        }
     }
 }

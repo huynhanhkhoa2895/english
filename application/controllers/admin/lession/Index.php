@@ -130,10 +130,19 @@ class Index extends CI_Controller{
                 else $class['vocabulary'] = true;
             }
         }
-        if($type == "vocabulary"){
+        if($type == "communication"){
+            foreach($this->Model->query('communication',["select"=>"id,e_name,v_name","whereArray"=>["student_id"=>$this->session->userdata("id")],"order_by"=>$sort]) as $it){
+                $new_arr['id'] = $it['id'];
+                $new_arr['class'] = 'communication';
+                $new_arr['e_name'] = $it['e_name'];
+                $new_arr['v_name'] = $it['v_name'];
+                $arr[]=$new_arr;
+                $new_arr = [];
+            }
+        }else{
             if(empty($class['vocabulary'])){
                 $conditionVocabulary = [];
-                if(!empty($filter['category'])) $conditionVocabulary = ['category'=>$filter['category']];
+                if(!empty($filter['category'])) $conditionVocabulary = ["FIND_IN_SET(".$filter['category'].",`category`) AND 1=1"];
                 if(!empty($filter['type'])) $conditionVocabulary = ['type'=>$filter['type']];
                 foreach($this->Model->query('vocabulary',["select"=>"id,e_name,v_name,spell,category,type","whereArray"=>[$condition,$conditionVocabulary],"order_by"=>$sort]) as $vocabulary){
                     $new_arr['id'] = $vocabulary['id'];
@@ -154,15 +163,6 @@ class Index extends CI_Controller{
                     $arr[]=$new_arr;
                     $new_arr = [];
                 }
-            }
-        }elseif($type == "communication"){
-            foreach($this->Model->query('communication',["select"=>"id,e_name,v_name","whereArray"=>["student_id"=>$this->session->userdata("id")],"order_by"=>$sort]) as $it){
-                $new_arr['id'] = $it['id'];
-                $new_arr['class'] = 'communication';
-                $new_arr['e_name'] = $it['e_name'];
-                $new_arr['v_name'] = $it['v_name'];
-                $arr[]=$new_arr;
-                $new_arr = [];
             }
         }
         return $arr;

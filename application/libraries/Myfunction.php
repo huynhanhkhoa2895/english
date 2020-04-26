@@ -77,7 +77,7 @@ class Myfunction{
     }
     function speakEnglish($word){
         if(!file_exists("public/audio/".$word.".mp3")){
-            putenv('GOOGLE_APPLICATION_CREDENTIALS=sega-5ceef964c1a9.json');
+            putenv('GOOGLE_APPLICATION_CREDENTIALS=sega-45d512ceaa91.json');
             $client = new TextToSpeechClient();
             // sets text to be synthesised
             $synthesisInputText = (new SynthesisInput())
