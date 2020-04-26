@@ -75,3 +75,12 @@
     font-weight: bold;
     font-size: 36px
 }
+.test-communication{
+    background: #333;
+    display: block;
+    color: #333;
+    padding: 5px;
+}
+.test-communication.active{
+    background: transparent;
+}

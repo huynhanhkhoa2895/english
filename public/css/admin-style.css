@@ -115,3 +115,6 @@
     line-height: 3.2;
     cursor: pointer;
 }
+.select2-container>span.selection{
+    width: 100%;
+}

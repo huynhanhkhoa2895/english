@@ -77,6 +77,7 @@
         ?>
         let action = '<?=$action?>';
         let id = '<?php if(!empty($id)) echo $id?>';
+        let exercise_type = '<?php if(!empty($exercise_type)) echo $exercise_type?>';
         if(first_href == "" || first_href == null ) {
             $('.body-left li a').first().click();
         }

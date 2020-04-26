@@ -185,7 +185,7 @@
             event.stopPropagation()
             event.preventDefault()
         })  
-        $(document).on("click",".content-table-result tr",function(){
+        $(document).on("click","#content-table-result tr",function(){
             let tr = $(this)[0];
             let id = $(tr).data('id');
             let classs = $(tr).data('class');

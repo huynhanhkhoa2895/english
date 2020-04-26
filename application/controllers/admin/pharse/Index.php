@@ -100,6 +100,10 @@ class Index extends CI_Controller{
         }
         $arr['e_name'] =strtolower(trim($this->input->post('e_name')));
         $arr['v_name'] =strtolower(trim($this->input->post('v_name')));
+        if($this->myfunction->isSpecialChar($arr['e_name'])){
+            echo json_encode(array("err"=>1,"msg"=> "Không thể có ký tự đặc biệt"));
+            return;
+        }
         $this->myfunction->createFileSpeakEnglish($arr['e_name']);
         if($this->Model->isEmptyPharse($arr['e_name'])){
             $this->Model->insert("pharse",$arr);

@@ -18,6 +18,7 @@ function loadAjax(action,href,id="") {
             $('.body-right .section-content').html(kq);
             rewrite_url = url+"admin/"+href+"?action="+action;
             if(id != "") rewrite_url += `&id=${id}`;
+            console.log(id)
             window.history.pushState(null, null,rewrite_url);
         }
     }).done(function () {

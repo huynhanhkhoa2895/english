@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Index extends CI_Controller{
     private $uploadPath = './public/';
+    private $_table = "vocabulary";
     function __construct(){
         parent::__construct();
         $this->load->model('Model');
@@ -14,14 +15,18 @@ class Index extends CI_Controller{
     function index(){
         $data['href'] = 'vocabulary';
         $data['action'] = $this->input->get('action');
+        $data['id'] = $this->input->get('id');
         $this->load->view('admin/admin',$data);
     }
     function indexAjax(){
         $action = $this->input->get('action');
+        $id =  $this->input->get('id');
         if($action == 'list'){
             $this->loadTable();
         }elseif($action == 'add'){
             $this->loadAdd();
+        }elseif($action == 'edit'){
+            $this->loadAdd($action,$id);
         }
     }
     function loadTable(){
@@ -30,9 +35,25 @@ class Index extends CI_Controller{
         $data['header'] = array('id'=>'Từ vựng','e_name'=>'Tiếng Anh','v_name'=>'Tiếng Việt','spell'=>'Spell','category'=>'Category','action'=>'Action');
         $this->load->view('admin/list',$data);
     }
-    function loadAdd(){
+    function loadAdd($action="add",$id=""){
         $data['title'] = 'Từ vựng';
         $data['categorys'] = $this->Model->getAllTable('category');
+        $data['id'] = $id;
+        $data['e_name'] = "";
+        $data['v_name'] = "";
+        $data['spell'] = "";
+        $data['type'] = "";
+        $data['current_categorys']= [];
+        if(!empty($id)){
+            $value = $this->Model->getTable($this->_table,["id"=>$id]);
+            $data['e_name'] = $value->e_name;
+            $data['v_name'] = $value->v_name;
+            $data['spell'] = $value->spell;
+            $data['type'] = $value->type;
+            foreach($this->Model->query("category",["where_in"=>["id"=>explode(",",$value->category)],"select"=>"id"]) as $it){
+                $data['current_categorys'][] = $it['id'];
+            }
+        }
         $this->load->view('admin/vocabulary/add',$data);
     }
     function postExcel(){        
@@ -101,12 +122,23 @@ class Index extends CI_Controller{
         $arr['e_name'] =strtolower(trim($this->input->post('e_name')));
         $arr['v_name'] =strtolower(trim($this->input->post('v_name')));
         $arr['spell'] = strtolower(trim($this->input->post('spell')));
-        $arr['category'] = $this->input->post('category');
+        $arr['category'] = implode(",",$this->input->post('category'));
         $arr['type'] = $this->input->post('type');
-        $this->myfunction->createFileSpeakEnglish($arr['e_name']);
-        if($this->Model->isEmptyVocabulary($arr['e_name'],$arr['type'])){
-            $this->Model->insert("vocabulary",$arr);
-            echo json_encode(array("err"=>0,"msg"=> "Thêm từ vựng thành công"));
+        if($this->myfunction->isSpecialChar($arr['e_name'])){
+            echo json_encode(array("err"=>1,"msg"=> "Không thể có ký tự đặc biệt"));
+            return;
+        }
+        $action = empty($this->input->post("id")) ? "add" : "edit";
+        if($this->Model->isEmptyVocabulary($arr['e_name'],$arr['type'],$action,$this->input->post("id"))){
+            if(empty($this->input->post("id"))){
+                $this->Model->insert("vocabulary",$arr);
+                $this->myfunction->createFileSpeakEnglish($arr['e_name']);
+                echo json_encode(array("err"=>0,"msg"=> "Thêm từ vựng thành công"));
+            }else{
+                $this->Model->update("vocabulary",$arr,["id"=>$this->input->post("id")]);
+                echo json_encode(array("err"=>0,"msg"=> "Cập nhật từ vựng thành công"));
+            }
+
         }else{
             echo json_encode(array("err"=>1,"msg"=> "Từ này đã tồn tại"));
         }

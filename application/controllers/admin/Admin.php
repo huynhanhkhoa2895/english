@@ -14,6 +14,7 @@ class Admin extends CI_Controller
 
     function index(){
         $data['action'] = 'list';
+        $data['id'] = empty($this->input->get("id")) ? "" : $this->input->get("id");
         $this->load->view('admin/admin',$data);
     }
 }

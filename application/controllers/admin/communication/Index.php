@@ -63,6 +63,10 @@ class Index extends CI_Controller implements Context{
         $arr['e_name'] =trim($this->input->post('e_name'));
         $arr['v_name'] =trim($this->input->post('v_name'));
         $arr['student_id'] =$this->session->userdata("id");
+        if($this->myfunction->isSpecialChar($arr['e_name'])){
+            echo json_encode(array("err"=>1,"msg"=> "Không thể có ký tự đặc biệt"));
+            return;
+        }
         if($action == 'add'){ 
             $this->myfunction->createFileSpeakEnglish($arr['e_name']);       
             $this->Model->insert("communication",$arr);

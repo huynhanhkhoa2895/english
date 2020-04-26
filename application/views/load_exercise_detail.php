@@ -6,7 +6,14 @@
 <body data-exercise="<?=$exercise?>">
     <?php $this->load->view('header'); ?>
     <section class="container body-section">
-        <h3>Bài <?=$name?></h3>
+        <div class="row">
+            <div class="col-6">
+                <h3>Bài <?=$name?></h3>
+            </div>
+            <div class="col-6 text-right">
+                <h3>Loại bài tập: <?=$type?></h3>
+            </div>
+        </div>
         <hr/>
         <?php if($type=="vocabulary"){ ?>
             <div class="test-container">
@@ -43,14 +50,13 @@
                         </div>
                         <div class="col-4">
                             <h4>
-                                <span class=""><?=$t['v_name']?> <?php if(!empty($t['type'])) echo '('.$t['type'].')';?></span>
+                                <span class="test-communication"><?=$t['e_name']?> <?php if(!empty($t['type'])) echo '('.$t['type'].')';?></span>
                                 <?=$this->myfunction->speakEnglish($t['e_name'])?>                                    
                             </h4>
                         </div>
                         <div class="col-4">
-                            <div>
-                                <textarea data-id="<?=$t['id']?>" autocomplete="off" id="input-vocabulary-<?=$t['id']?>" class="input-vocabulary form-control">
-                                </textarea>
+                            <div style="margin-bottom: 10px">
+                                <textarea data-id="<?=$t['id']?>" autocomplete="off" id="input-vocabulary-<?=$t['id']?>" class="input-vocabulary form-control"></textarea>
                             </div>
                             <div><button id="btn-vocabulary-<?=$t['id']?>" onclick="nextExercise(this)" type="button" class="btn btn-primary">Tiếp tục</button></div>
                         </div>
@@ -143,8 +149,19 @@
                 logs[id]['result'] = false;
             }
         })
+
         $.post(url+"home/saveLog",{logs : logs,exercise : exercise,data : data},function(kq){
             
         })
     }
+    $(".test-communication").on("click",function(event){
+        if($(this).hasClass("active")){
+            $(this).removeClass("active")
+        }else{
+            $(this).addClass("active")
+        }
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        
+    })      
 </script>

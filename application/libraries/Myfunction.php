@@ -111,8 +111,14 @@ class Myfunction{
             </span>
         ';
     }
+    function isSpecialChar($string){
+        if (preg_match('/[\'^£$%&*()}{@#~?><>,|=_+¬-]/', $string)){
+            return true;
+        }
+        return false;
+    }
     function createFileSpeakEnglish($word){
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=sega-5ceef964c1a9.json');
+        putenv('GOOGLE_APPLICATION_CREDENTIALS=sega-45d512ceaa91.json');
         $client = new TextToSpeechClient();
         // sets text to be synthesised
         $synthesisInputText = (new SynthesisInput())

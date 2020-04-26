@@ -50,7 +50,10 @@ class Home extends CI_Controller{
             break;
             case "communication":
                 foreach($data['exercises'] as $it){
-                    
+                    $arrVol[] = $it['vocabulary_id'];
+                }
+                if(!empty($arrVol)){
+                    $arr=array_merge($arr,$this->Model->query("communication",["where_in"=>["id"=> $arrVol],"select"=>"id,e_name,v_name"]));
                 }
             break;
         }

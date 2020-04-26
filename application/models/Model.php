@@ -117,9 +117,16 @@ class Model extends CI_Model{
     public function getTotal($table){
         return $this->db->get($table)->num_rows();
     }
-    public function isEmptyVocabulary($vocabulary,$type){
-        if(empty($this->db->get_where('vocabulary',['e_name'=>$vocabulary,'type'=>$type])->first_row())) return true;
-        else return false;
+    public function isEmptyVocabulary($vocabulary,$type,$action="add",$id=""){
+        if($action=="add"){
+            if(empty($this->db->get_where('vocabulary',['e_name'=>$vocabulary,'type'=>$type])->first_row())) return true;
+            else return false;
+        }else{
+            if(empty($this->db->get_where('vocabulary',['e_name'=>$vocabulary,'type'=>$type,"id !="=>$id])->first_row())) 
+                return true;
+            else return false;
+        }
+
     }
     public function isEmptyPharse($pharse){
         if(empty($this->db->get_where('pharse',['e_name'=>$pharse])->first_row())) return true;

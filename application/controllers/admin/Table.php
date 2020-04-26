@@ -133,7 +133,6 @@ class Table extends CI_Controller
                     }
                     break;
                 case 'vocabulary' :
-                    
                     $categorys = $this->Model->getAllTable("category");
                     $category = [];
                     foreach($categorys as $cate){
@@ -141,9 +140,14 @@ class Table extends CI_Controller
                     }
                     
                     foreach ($data as $val){
-                        $val['category'] = $category[$val['category']];
+                        $list_category = $this->Model->query("category",["where_in"=>["id"=>explode(",",$val['category'])]]);
+                        $val['category'] = "";
+                        foreach($list_category as $it){
+                            $val['category'] .= $it['e_name'].", ";
+                        }
+                        $val['category']  = rtrim($val['category'],", ");
                         $val['e_name'] .= "(".$val['type'].") ".$this->myfunction->speakEnglish($val['e_name']);
-                        $val['action'] ="<a href='".base_url()."edit/".$val['id']."'>Edit</a>";
+                        $val['action'] = "<a href='".base_url()."admin/vocabulary?action=edit&id=".$val['id']."'>Edit</a>";
                         $table[] = $val;        
                     }
                     break;

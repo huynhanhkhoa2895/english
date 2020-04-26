@@ -1,30 +1,22 @@
-<script>
-products = ['a','d','e','f'];
-productPrices = [2,4,6,8];
-productSold = ['f','f'];
-soldPrice = [8,8];
-function priceCheck(products, productPrices, productSold, soldPrice) {
-    // Write your code here
-    let pro = {};
-    let incorect = 0;
-    products.forEach((e,k)=>{
-        pro[e] = {};
-        productPrices.forEach((e2,k2)=>{
-            if(k == k2){
-                pro[e] = e2;
-            }
-        })
-    })
-    productSold.forEach((e,k)=>{
-        let price = pro[e]
-        soldPrice.forEach((e2,k2)=>{
-            if(price != e2 && k == k2){
-                incorect++;
-            }
-        })
-    })
-    console.log(incorect)
-    return incorect;
+<?php 
+$str = "g fmnc wms bgblr rpylqjyrc gr zw fylb. rfyrq ufyr amknsrcpq ypc dmp. bmgle grgl zw fylb gq glcddgagclr ylb rfyr'q ufw rfgq rcvr gq qm jmle.";
+function giaiMa($str){
+    $string = "";
+    foreach(str_split($str) as $it){
+        $char="";
+        switch($it){
+            case "m" : $char = "k";
+            break; 
+            case "q" : $char = "o";
+            break; 
+            case "g" : $char = "e";
+            break; 
+            default : $char = $it;
+            break;
+        }
+        $string .= $char;
+    }
+    return $string;
 }
-priceCheck(products, productPrices, productSold, soldPrice);
-</script>
+echo giaiMa($str);
+?>
