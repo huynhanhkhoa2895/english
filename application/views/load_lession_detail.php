@@ -10,7 +10,7 @@
         <hr/>
         <div class="row test-container">
             <div class="col">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-lession-vocabulary">
                     <thead>
                         <tr>
                             <th style="cursor : pointer" data-show="1" onclick="toggleHide(this,'e')">Hide</th>
@@ -21,10 +21,19 @@
                         <?php foreach($lessions as $key=>$t){ ?>                
                             <tr>
                                 <td class="col-e-name">
-                                    <?=$t['e_name']?> <?php if(!empty($vol['type'])) echo '('.$vol['type'].')';?>
+                                    <?=$t['e_name']?> <?php if(!empty($t['type'])) echo '('.$t['type'].')';?>
                                     <?=$this->myfunction->speakEnglish($t['e_name'])?>
                                 </td>
-                                <td class="col-v-name"><?=$t['v_name']?></td>
+                                <td class="col-v-name">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <?=$t['v_name']?>
+                                        </div>
+                                        <div class="col-6">
+                                            <input class="form-control" />
+                                        </div>
+                                    </diV>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>
@@ -60,15 +69,21 @@
 <script type="text/javascript">
     function toggleHide(it,col){
         let show = $(it).data("show");
-        console.log(show);
         if(show == 1){
             $(it).html("Show");
             $(it).data("show",0);
-            $(`.col-${col}-name`).css("background","#212529")
+            $(`.col-${col}-name`).css("background","#212529");
+            $(".table-lession-vocabulary").addClass("active");
         }else{
             $(it).html("Hide");
             $(it).data("show",1);
-            $(`.col-${col}-name`).css("background","#fff")
+            $(`.col-${col}-name`).css("background","#fff");
+            $(".table-lession-vocabulary").removeClass("active");
         }
     }
+    $(document).on("click",".col-e-name",function(){
+        if($(".table-lession-vocabulary").hasClass("active")){
+            $(this).find(".span-speak-english").click()
+        }
+    })
 </script>
