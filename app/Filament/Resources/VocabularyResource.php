@@ -44,7 +44,7 @@ class VocabularyResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('vocabulary')->sortable(),
+                TextColumn::make('vocabulary')->sortable()->searchable(),
                 TextColumn::make('translate')->sortable(),
                 TextColumn::make('spelling')->sortable(),
                 TextColumn::make('categories.name')->sortable(),

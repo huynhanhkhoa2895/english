@@ -31,7 +31,7 @@ class Vocabulary extends Model
 
     public function lessons(): BelongsToMany
     {
-        return $this->belongsToMany(Lesson::class);
+        return $this->belongsToMany(Lesson::class)->withPivot("vocabulary_id");
     }
 
     public function exam(): BelongsToMany

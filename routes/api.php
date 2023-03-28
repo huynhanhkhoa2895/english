@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\LessonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,5 @@ Route::post('login', [PassportAuthController::class, 'login'])->name("login");
 
 Route::middleware('auth:api')->group(function () {
     Route::resource('user', UserController::class);
+    Route::resource('lesson', LessonController::class);
 });
