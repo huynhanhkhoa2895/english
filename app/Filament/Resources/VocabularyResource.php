@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VocabularyResource\Pages;
 use App\Filament\Resources\VocabularyResource\RelationManagers;
+use App\Models\Lesson;
 use App\Models\Vocabulary;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -14,6 +15,8 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
 
 class VocabularyResource extends Resource
 {
@@ -48,7 +51,8 @@ class VocabularyResource extends Resource
                 TextColumn::make('translate')->sortable(),
                 TextColumn::make('spelling')->sortable(),
                 TextColumn::make('categories.name')->sortable(),
-
+                TextColumn::make('created_at')->dateTime()->sortable(),
+                TextColumn::make('updated_at')->dateTime()->sortable()
             ])
             ->filters([
                 //
@@ -58,6 +62,18 @@ class VocabularyResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                BulkAction::make('attachLesson')
+                    ->action(function (Collection $records, array $data): void {
+                        foreach ($records as $record) {
+                            $record->lessons()->sync($data['lessonId']);
+                        }
+                    })
+                    ->form([
+                        Forms\Components\Select::make('lessonId')
+                            ->label('Lesson')
+                            ->options(Lesson::query()->pluck('name', 'id'))
+                            ->required(),
+                    ])
             ])
             ->defaultSort('vocabulary');
     }

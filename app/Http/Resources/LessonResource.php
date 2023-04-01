@@ -18,6 +18,7 @@ class LessonResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "vocabularies" => new VocabularyCollection($this->whenLoaded("vocabularies")->load("categories")),
+            "createdAt" => $this->created_at
         ];
     }
 }

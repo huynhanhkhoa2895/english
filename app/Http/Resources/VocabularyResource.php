@@ -22,7 +22,8 @@ class VocabularyResource extends JsonResource
             "spelling" =>  $this->spelling,
             "example" =>  $this->example,
             "sound" =>  $this->sound,
-            "category" => new CategoryResource($this->whenLoaded("categories") ?? null)
+            "category" => new CategoryResource($this->whenLoaded("categories") ?? null),
+            "createdAt" => $this->created_at
         ];
     }
 }
