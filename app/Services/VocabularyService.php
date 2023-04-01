@@ -68,7 +68,7 @@ class VocabularyService implements VocabularyInterface
                     return false;
                 }
             }
-            return '/speech/'.$text.'.mp3';
+            return $text.'.mp3';
 
         } catch (Exception $exception) {
             Log::error("VocabularyService: textToSpeach - ".$exception->getMessage());

@@ -38,8 +38,9 @@ return [
 
         'speech' => [
             'driver' => 'local',
-            'root' => storage_path('app/speech'),
+            'root' => storage_path('app/public/speech'),
             'throw' => false,
+            'visibility' => 'public',
         ],
 
         'public' => [

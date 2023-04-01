@@ -14,6 +14,8 @@ class VocabularyObserver
             if($vocabulary->sound !== $path) {
                 $vocabulary->sound = $path;
                 $vocabulary->save();
+                dd($vocabulary->sound,$path);
+
             }
 
         }
