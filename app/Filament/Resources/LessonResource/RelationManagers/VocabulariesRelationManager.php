@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\LessonResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
@@ -23,6 +25,11 @@ class VocabulariesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('vocabulary')
                     ->required()
                     ->maxLength(255),
+                TextInput::make('translate'),
+                TextInput::make('spelling'),
+                Forms\Components\Select::make('category_id')
+                    ->relationship('categories', 'name'),
+                RichEditor::make('example')->columnSpanFull(),
             ]);
     }
 

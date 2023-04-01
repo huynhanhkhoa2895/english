@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LessonCollection;
+use App\Http\Resources\LessonResource;
 use App\Interface\LessonInterface;
 use Illuminate\Http\Request;
 
@@ -44,6 +45,9 @@ class LessonController extends Controller
     public function show(string $id)
     {
         //
+        return response()->json([
+            "data" => new LessonResource($this->lessonService->getById($id)->load("vocabularies"))
+        ]);
     }
 
     /**
