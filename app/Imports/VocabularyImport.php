@@ -3,8 +3,9 @@
 namespace App\Imports;
 
 use App\Models\Vocabulary;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToModel;
-
+use Exception;
 class VocabularyImport implements ToModel
 {
     /**
@@ -14,11 +15,18 @@ class VocabularyImport implements ToModel
     */
     public function model(array $row)
     {
-        return Vocabulary::updateOrCreate([
-            'vocabulary'     => $row[0]
-        ],[
-            'translate'    => $row[1] ?? '',
-            'example'    => $row[2] ?? '',
-        ]);
+        try {
+            if(!empty($row[0])){
+                return Vocabulary::updateOrCreate([
+                    'vocabulary'     => trim($row[0])
+                ],[
+                    'translate'    => $row[1] ?? '',
+                    'example'    => $row[2] ?? '',
+                ]);;
+            }
+        } catch (Exception $e) {
+            Log::error("VocabularyImport: model - ".$e->getMessage());
+        }
+
     }
 }

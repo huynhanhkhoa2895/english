@@ -10,7 +10,7 @@ class VocabularyObserver
     public function saved(Vocabulary $vocabulary): void
     {
         $vocabularyService = app(VocabularyInterface::class);
-        if($path = $vocabularyService->textToSpeach($vocabulary->vocabulary)) {
+        if($path = $vocabularyService->textToSpeach(trim($vocabulary->vocabulary))) {
             if($vocabulary->sound !== $path) {
                 $vocabulary->sound = $path;
                 $vocabulary->save();
@@ -24,6 +24,7 @@ class VocabularyObserver
      */
     public function deleted(Vocabulary $vocabulary): void
     {
+        dd("test");
         //
     }
 
