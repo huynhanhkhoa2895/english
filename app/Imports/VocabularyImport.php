@@ -21,7 +21,7 @@ class VocabularyImport implements ToModel
                     'vocabulary'     => trim($row[0])
                 ],[
                     'translate'    => $row[1] ?? '',
-                    'example'    => $row[2] ?? '',
+                    'example'    => $row[2] ?? null,
                 ]);;
             }
         } catch (Exception $e) {

@@ -24,7 +24,6 @@ class VocabularyObserver
      */
     public function deleted(Vocabulary $vocabulary): void
     {
-        dd("test");
         //
     }
 

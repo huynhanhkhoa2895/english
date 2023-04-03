@@ -21,7 +21,8 @@ class Vocabulary extends Model
         'translate',
         'example',
         'sound',
-        'category_id'
+        'category_id',
+        'parts_of_speech'
     ];
 
     function categories(): \Illuminate\Database\Eloquent\Relations\BelongsTo

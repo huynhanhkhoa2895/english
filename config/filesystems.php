@@ -39,6 +39,7 @@ return [
         'speech' => [
             'driver' => 'local',
             'root' => storage_path('app/public/speech'),
+            'url' => env('APP_URL').'/storage/speech',
             'throw' => false,
             'visibility' => 'public',
         ],

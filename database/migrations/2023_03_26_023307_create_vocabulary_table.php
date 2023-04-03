@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained('category');
             $table->string("vocabulary")->unique();
+            $table->string("parts_of_speech",20)->nullable()->index();
             $table->string("translate")->nullable();
             $table->string("spelling")->nullable();
             $table->text("example")->nullable();
             $table->string("sound")->nullable();
             $table->softDeletes();
+            $table->foreignId('created_by')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

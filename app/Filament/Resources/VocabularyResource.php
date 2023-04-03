@@ -17,6 +17,10 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 
 class VocabularyResource extends Resource
 {
@@ -33,6 +37,13 @@ class VocabularyResource extends Resource
                 TextInput::make('spelling'),
                 Forms\Components\Select::make('category_id')
                     ->relationship('categories', 'name'),
+                Select::make('parts_of_speech')
+                    ->options([
+                        'n' => 'Noun (n)',
+                        'v' => 'Verb (v)',
+                        'adj' => 'Adjective (adj)',
+                        'adv' => 'Adverb (adv)',
+                    ]),
                 RichEditor::make('example')->columnSpanFull(),
                 FileUpload::make('sound')
                     ->disk('speech')
@@ -48,14 +59,29 @@ class VocabularyResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('vocabulary')->sortable()->searchable(),
-                TextColumn::make('translate')->sortable(),
-                TextColumn::make('spelling')->sortable(),
+                TextColumn::make('translate'),
+                TextColumn::make('parts_of_speech')->sortable(),
                 TextColumn::make('categories.name')->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
                 TextColumn::make('updated_at')->dateTime()->sortable()
             ])
             ->filters([
-                //
+                SelectFilter::make('parts_of_speech')
+                    ->options([
+                        'n' => 'Noun (n)',
+                        'v' => 'Verb (v)',
+                        'adj' => 'Adjective (adj)',
+                        'adv' => 'Adverb (adv)',
+                    ]),
+                Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_at')->default(now()),
+                    ])->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['created_at'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '=', $date),
+                        );
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
