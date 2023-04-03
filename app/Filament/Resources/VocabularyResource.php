@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\VocabularyResource\Pages;
 use App\Filament\Resources\VocabularyResource\RelationManagers;
+use App\Interface\VocabularyInterface;
 use App\Models\Lesson;
 use App\Models\Vocabulary;
 use Filament\Forms;
@@ -75,7 +76,7 @@ class VocabularyResource extends Resource
                     ]),
                 Filter::make('created_at')
                     ->form([
-                        Forms\Components\DatePicker::make('created_at')->default(now()),
+                        Forms\Components\DatePicker::make('created_at'),
                     ])->query(function (Builder $query, array $data): Builder {
                         return $query->when(
                             $data['created_at'],
@@ -99,7 +100,13 @@ class VocabularyResource extends Resource
                             ->label('Lesson')
                             ->options(Lesson::query()->pluck('name', 'id'))
                             ->required(),
-                    ])
+                    ]),
+                BulkAction::make('exportExcel')
+                    ->action(function (Collection $records, array $data) {
+                        $vocabularyService = app(VocabularyInterface::class);
+                        return $vocabularyService->exportExcel($records);
+                    })
+
             ])
             ->defaultSort('vocabulary');
     }

@@ -3,14 +3,17 @@
 namespace App\Services;
 
 use App\Imports\VocabularyImport;
+use App\Exports\VocabularyExport;
 use App\Interface\VocabularyInterface;
-
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Models\Vocabulary;
 use Google\Cloud\TextToSpeech\V1\AudioConfig;
 use Google\Cloud\TextToSpeech\V1\AudioEncoding;
 use Google\Cloud\TextToSpeech\V1\SynthesisInput;
 use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
 use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\VocabularyRepository;
@@ -72,6 +75,24 @@ class VocabularyService implements VocabularyInterface
 
         } catch (Exception $exception) {
             Log::error("VocabularyService: textToSpeach - ".$exception->getMessage());
+            return false;
+        }
+    }
+
+    function exportExcel(Collection $models):BinaryFileResponse|false
+    {
+        try{
+            $data = $models->map(function (Vocabulary $vocabulary){
+                $value = [];
+                $value[] = $vocabulary->vocabulary." ".(empty($vocabulary->parts_of_speech) ? "" : "(".$vocabulary->parts_of_speech.")");
+                $value[] = $vocabulary->translate ?? '';
+                $value[] = $vocabulary->example ?? '';
+                return $value;
+            });
+
+            return Excel::download(new VocabularyExport($data),'vocabulary.xlsx');;
+        } catch (Exception $exception) {
+            Log::error("VocabularyService: importFromExcel - ".$exception->getMessage());
             return false;
         }
     }
