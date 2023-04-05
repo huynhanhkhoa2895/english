@@ -45,6 +45,7 @@ class VocabularyResource extends Resource
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
                     ]),
+                RichEditor::make('definition')->columnSpanFull(),
                 RichEditor::make('example')->columnSpanFull(),
                 FileUpload::make('sound')
                     ->disk('speech')

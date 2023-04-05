@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Imports\VocabularyImport;
 use App\Exports\VocabularyExport;
 use App\Interface\VocabularyInterface;
+use App\Interface\ZipInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\Vocabulary;
 use Google\Cloud\TextToSpeech\V1\AudioConfig;
@@ -22,7 +23,7 @@ use Excel;
 class VocabularyService implements VocabularyInterface
 {
 
-    function __construct(VocabularyRepository $repo){
+    function __construct(VocabularyRepository $repo,protected ZipInterface $zipService ){
 
     }
 
@@ -89,11 +90,16 @@ class VocabularyService implements VocabularyInterface
                 $value[] = $vocabulary->example ?? '';
                 return $value;
             });
-
-            return Excel::download(new VocabularyExport($data),'vocabulary.xlsx');;
+            Excel::store(new VocabularyExport($data),'vocabulary.xlsx','excel');
+            $pathZip = $this->zipService->zipFile($models->pluck("sound")->all(),"sound","speech");
+            $this->zipService->zipFile([$pathZip,Storage::disk('excel')->path('vocabulary.xlsx')],"excel",null);
+            dd(Storage::disk('zip')->get('excel.zip'));
+            return Storage::disk('zip')->get('excel.zip');
         } catch (Exception $exception) {
+            dd($exception);
             Log::error("VocabularyService: importFromExcel - ".$exception->getMessage());
             return false;
         }
     }
+
 }

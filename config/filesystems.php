@@ -44,6 +44,23 @@ return [
             'visibility' => 'public',
         ],
 
+        'excel' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/excel'),
+            'url' => env('APP_URL').'/storage/excel',
+            'throw' => false,
+            'visibility' => 'public',
+        ],
+
+
+        'zip' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/zip'),
+            'url' => env('APP_URL').'/storage/zip',
+            'throw' => false,
+            'visibility' => 'public',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
