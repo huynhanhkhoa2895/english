@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("translate")->nullable();
             $table->string("spelling")->nullable();
             $table->text("example")->nullable();
+            $table->text("definition")->nullable();
             $table->string("sound")->nullable();
             $table->softDeletes();
             $table->foreignId('created_by')->nullable()->constrained('users');

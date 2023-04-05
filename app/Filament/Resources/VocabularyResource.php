@@ -51,6 +51,9 @@ class VocabularyResource extends Resource
                     ->visibility('public')
                     ->acceptedFileTypes(['audio/mpeg'])
                     ->maxSize(100)
+                    ->getUploadedFileNameForStorageUsing(function (Vocabulary $record): string {
+                        return $record->vocabulary.".mp3";
+                    })
                     ->enableDownload()
             ]);
     }
