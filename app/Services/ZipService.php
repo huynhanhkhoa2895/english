@@ -15,17 +15,17 @@ class ZipService implements ZipInterface
         $this->disk = $disk;
     }
 
-    function zipFile(array $paths,string $nameFileZip,?string $disk): string|false
+    function zipFile(array $paths,string $nameFileZip,string|array $disk): string|false
     {
         // TODO: Implement zipFile() method.
         try{
             $zip = new \ZipArchive();
             $zip->open(Storage::disk("zip")->path($nameFileZip.".zip"), \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-            foreach ($paths as $path) {
-                $zip->addFile(!empty($disk) ? Storage::disk($disk)->path($path) : $path, $path);
+            foreach ($paths as $key=>$path) {
+                $zip->addFile(!is_array($disk) ? Storage::disk($disk)->path($path) : Storage::disk($disk[$key])->path($path), $path);
             }
             $zip->close();
-            return Storage::disk("zip")->path($nameFileZip.".zip");
+            return $nameFileZip.".zip";
         }catch (Exception $exception){
             dd($exception);
             Log::error("ZipService: zipFile - ".$exception->getMessage());

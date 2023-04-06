@@ -91,12 +91,10 @@ class VocabularyService implements VocabularyInterface
                 return $value;
             });
             Excel::store(new VocabularyExport($data),'vocabulary.xlsx','excel');
-            $pathZip = $this->zipService->zipFile($models->pluck("sound")->all(),"sound","speech");
-            $this->zipService->zipFile([$pathZip,Storage::disk('excel')->path('vocabulary.xlsx')],"excel",null);
-            dd(Storage::disk('zip')->get('excel.zip'));
-            return Storage::disk('zip')->get('excel.zip');
+            $nameFile = $this->zipService->zipFile($models->pluck("sound")->all(),"sound","speech");
+            $fileZipVocabularyAndSound = $this->zipService->zipFile([$nameFile,'vocabulary.xlsx'],"excel",["zip","excel"]);
+            return response()->download(Storage::disk('zip')->path($fileZipVocabularyAndSound));
         } catch (Exception $exception) {
-            dd($exception);
             Log::error("VocabularyService: importFromExcel - ".$exception->getMessage());
             return false;
         }

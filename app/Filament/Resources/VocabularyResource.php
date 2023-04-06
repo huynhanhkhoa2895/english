@@ -35,7 +35,7 @@ class VocabularyResource extends Resource
             ->schema([
                 TextInput::make('vocabulary')->unique(ignoreRecord: true)->required(),
                 TextInput::make('translate'),
-                TextInput::make('spelling'),
+                TextInput::make('spelling')->label('Transcript'),
                 Forms\Components\Select::make('category_id')
                     ->relationship('categories', 'name'),
                 Select::make('parts_of_speech')
@@ -64,8 +64,8 @@ class VocabularyResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('vocabulary')->sortable()->searchable(),
-                TextColumn::make('translate'),
                 TextColumn::make('parts_of_speech')->sortable(),
+                TextColumn::make('parts_of_speech')->label('Transcript'),
                 TextColumn::make('categories.name')->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
                 TextColumn::make('updated_at')->dateTime()->sortable()
