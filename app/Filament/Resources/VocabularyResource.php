@@ -22,6 +22,8 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Livewire\TemporaryUploadedFile;
 
 class VocabularyResource extends Resource
 {
@@ -47,7 +49,13 @@ class VocabularyResource extends Resource
                     ]),
                 MarkdownEditor::make('definition')->columnSpanFull(),
                 MarkdownEditor::make('example')->columnSpanFull(),
-                FileUpload::make('image')->image(),
+                SpatieMediaLibraryFileUpload::make('image')
+                    ->acceptedFileTypes(['image/*'])
+                    ->getUploadedFileNameForStorageUsing(function (Vocabulary $record,TemporaryUploadedFile $file): string {
+                        $array = explode(".", $file->getClientOriginalName());
+                        return $record->vocabulary.".".end($array);
+                    })
+                    ->image(),
                 FileUpload::make('sound')
                     ->disk('speech')
                     ->visibility('public')
