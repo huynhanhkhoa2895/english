@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Vocabulary extends Model
+class Vocabulary extends Model implements HasMedia
 {
+    use InteractsWithMedia;
     use HasFactory;
     protected $table = "vocabulary";
     /**
@@ -22,7 +25,8 @@ class Vocabulary extends Model
         'example',
         'sound',
         'category_id',
-        'parts_of_speech'
+        'parts_of_speech',
+        'definition'
     ];
 
     function categories(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -38,5 +42,12 @@ class Vocabulary extends Model
     public function exam(): BelongsToMany
     {
         return $this->belongsToMany(Exam::class);
+    }
+
+    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('image')
+            ->nonQueued();
     }
 }

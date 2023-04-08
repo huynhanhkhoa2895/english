@@ -14,7 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,6 +22,8 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Livewire\TemporaryUploadedFile;
 
 class VocabularyResource extends Resource
 {
@@ -45,8 +47,15 @@ class VocabularyResource extends Resource
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
                     ]),
-                RichEditor::make('definition')->columnSpanFull(),
-                RichEditor::make('example')->columnSpanFull(),
+                MarkdownEditor::make('definition')->columnSpanFull(),
+                MarkdownEditor::make('example')->columnSpanFull(),
+                SpatieMediaLibraryFileUpload::make('image')
+                    ->acceptedFileTypes(['image/*'])
+                    ->getUploadedFileNameForStorageUsing(function (Vocabulary $record,TemporaryUploadedFile $file): string {
+                        $array = explode(".", $file->getClientOriginalName());
+                        return $record->vocabulary.".".end($array);
+                    })
+                    ->image(),
                 FileUpload::make('sound')
                     ->disk('speech')
                     ->visibility('public')
@@ -108,8 +117,21 @@ class VocabularyResource extends Resource
                 BulkAction::make('exportExcel')
                     ->action(function (Collection $records, array $data) {
                         $vocabularyService = app(VocabularyInterface::class);
-                        return $vocabularyService->exportExcel($records);
+                        return $vocabularyService->exportExcel($records,$data['fields']);
                     })
+                    ->form([
+                        Select::make('fields')
+                            ->multiple()
+                            ->options([
+                                'vocabulary' => 'Vocabulary',
+                                'translate' => 'Translate',
+                                'spelling' => 'Transcript',
+                                'example' => 'Example',
+                                'definition' => 'Definition',
+                            ])
+                        ->required()
+                        ->default(['vocabulary','translate','example'])
+                    ])
 
             ])
             ->defaultSort('vocabulary');

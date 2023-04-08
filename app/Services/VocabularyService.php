@@ -80,14 +80,18 @@ class VocabularyService implements VocabularyInterface
         }
     }
 
-    function exportExcel(Collection $models):BinaryFileResponse|false
+    function exportExcel(Collection $models,$cols):BinaryFileResponse|false
     {
         try{
-            $data = $models->map(function (Vocabulary $vocabulary){
+            $data = $models->map(function (Vocabulary $vocabulary) use ($cols) {
                 $value = [];
-                $value[] = $vocabulary->vocabulary." ".(empty($vocabulary->parts_of_speech) ? "" : "(".$vocabulary->parts_of_speech.")");
-                $value[] = $vocabulary->translate ?? '';
-                $value[] = $vocabulary->example ?? '';
+                foreach ($cols as $col) {
+                    $val = $vocabulary->$col ?? '';
+                    if($col === "vocabulary"){
+                        $val = $vocabulary->vocabulary." ".(empty($vocabulary->parts_of_speech) ? "" : "(".$vocabulary->parts_of_speech.")");
+                    }
+                    $value[] = $val;
+                }
                 return $value;
             });
             Excel::store(new VocabularyExport($data),'vocabulary.xlsx','excel');
