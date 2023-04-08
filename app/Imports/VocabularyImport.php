@@ -17,11 +17,22 @@ class VocabularyImport implements ToModel
     {
         try {
             if(!empty($row[0])){
+                $match = [];
+                $vocal = $row[0];
+                $parts_of_speech = "";
+                preg_match("#(.*)(\((.*?)\))#",$row[0],$match);
+
+                if(!empty($match)){
+                    $parts_of_speech = $match[3] ?? "";
+                    $vocal = $match[1] ?? "";
+                }
+
                 return Vocabulary::updateOrCreate([
-                    'vocabulary'     => trim($row[0])
+                    'vocabulary'     => trim($vocal)
                 ],[
                     'translate'    => $row[1] ?? '',
                     'example'    => $row[2] ?? null,
+                    'parts_of_speech' => $parts_of_speech
                 ]);;
             }
         } catch (Exception $e) {

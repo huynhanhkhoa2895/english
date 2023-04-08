@@ -16,11 +16,11 @@ class EditVocabulary extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
-            Actions\Action::make('goToNext')
-                ->label('Next Vocabulary')
-                ->action('goToNext')
-                ->color('success'),
-                $this->getCancelFormAction(),
+//            Actions\Action::make('goToNext')
+//                ->label('Next Vocabulary')
+//                ->action('goToNext')
+//                ->color('success'),
+//                $this->getCancelFormAction(),
         ];
     }
 
