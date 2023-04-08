@@ -22,7 +22,12 @@ class ZipService implements ZipInterface
             $zip = new \ZipArchive();
             $zip->open(Storage::disk("zip")->path($nameFileZip.".zip"), \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
             foreach ($paths as $key=>$path) {
-                $zip->addFile(!is_array($disk) ? Storage::disk($disk)->path($path) : Storage::disk($disk[$key])->path($path), $path);
+                if($path !== null){
+                    $pathGetFile = !is_array($disk) ? Storage::disk($disk)->path($path) : Storage::disk($disk[$key])->path($path);
+                    if(is_file($pathGetFile)){
+                        $zip->addFile($pathGetFile, $path);
+                    }
+                }
             }
             $zip->close();
             return $nameFileZip.".zip";
