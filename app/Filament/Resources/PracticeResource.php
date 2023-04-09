@@ -45,6 +45,7 @@ class PracticeResource extends Resource
                         'reading' => 'Reading',
                         'listening' => 'Listening',
                     ])->required()->default('a1'),
+                TextInput::make('instructions')->maxLength(255),
                 MarkdownEditor::make('content')
                     ->required()
                     ->columnSpanFull(),

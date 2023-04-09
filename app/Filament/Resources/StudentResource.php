@@ -40,7 +40,7 @@ class StudentResource extends Resource
                     ]),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->maxLength(255),
+                    ->maxLength(255)
             ]);
     }
 

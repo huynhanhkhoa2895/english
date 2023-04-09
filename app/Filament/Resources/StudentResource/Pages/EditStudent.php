@@ -10,6 +10,12 @@ class EditStudent extends EditRecord
 {
     protected static string $resource = StudentResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['password'] = bcrypt($data['password']);
+        return $data;
+    }
+
     protected function getActions(): array
     {
         return [

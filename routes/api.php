@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PracticeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PassportAuthController;
@@ -21,6 +22,7 @@ Route::post('login', [PassportAuthController::class, 'login'])->name("login");
 Route::resource('lesson', LessonController::class);
 Route::resource('vocabulary', VocabularyController::class);
 Route::middleware('auth:api')->group(function () {
+    Route::resource('practice', PracticeController::class);
     Route::resource('user', UserController::class);
 
 });
