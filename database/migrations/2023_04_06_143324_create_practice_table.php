@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('practice', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
-            $table->string("level");
-            $table->string("type")->index();
+            $table->string("name");
+            $table->string("level",2)->index();
+            $table->string("type",10)->index();
             $table->string("instructions")->nullable();
-            $table->string("media");
             $table->text("content");
             $table->timestamps();
         });

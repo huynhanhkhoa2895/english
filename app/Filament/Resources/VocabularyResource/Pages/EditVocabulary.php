@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VocabularyResource\Pages;
 
 use App\Filament\Resources\VocabularyResource;
+use App\Interface\VocabularyInterface;
 use Filament\Pages\Actions;
 use Filament\Pages\Action;
 use Filament\Resources\Pages\EditRecord;
@@ -16,19 +17,36 @@ class EditVocabulary extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
-//            Actions\Action::make('goToNext')
-//                ->label('Next Vocabulary')
-//                ->action('goToNext')
-//                ->color('success'),
-//                $this->getCancelFormAction(),
+            Actions\Action::make('goToPrevious')
+                ->label('Previous Vocabulary')
+                ->action('goToPrevious')
+                ->color('success'),
+            Actions\Action::make('goToNext')
+                ->label('Next Vocabulary')
+                ->action('goToNext')
+                ->color('success'),
+
+            $this->getCancelFormAction(),
         ];
     }
 
     public function goToNext()
     {
         $resources = static::getResource();
-        dd($this->record->id);
-//        $this->redirect($resources::getUrl('create'));
-//        $this->save(true);
+        $vocabularyService = app(VocabularyInterface::class);
+        $data = $vocabularyService->getNextPreviousVocabulary($this->record,"next");
+        if(!empty($data)){
+            $this->redirect($resources::getUrl('edit',[$data->id]));
+        }
+    }
+
+    public function goToPrevious()
+    {
+        $resources = static::getResource();
+        $vocabularyService = app(VocabularyInterface::class);
+        $data = $vocabularyService->getNextPreviousVocabulary($this->record,"previous");
+        if(!empty($data)){
+            $this->redirect($resources::getUrl('edit',[$data->id]));
+        }
     }
 }

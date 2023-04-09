@@ -134,7 +134,7 @@ class VocabularyResource extends Resource
                     ])
 
             ])
-            ->defaultSort('vocabulary');
+            ->defaultSort('id','desc');
     }
 
     public static function getRelations(): array

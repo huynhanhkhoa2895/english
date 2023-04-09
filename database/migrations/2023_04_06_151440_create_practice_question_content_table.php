@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('practice_question_content', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('question_id')->constrained('practice_question')->cascadeOnDelete();
             $table->string('question');
-            $table->string('answer');
+            $table->string('answer')->nullable();
             $table->timestamps();
         });
     }

@@ -23,11 +23,11 @@ use Excel;
 class VocabularyService implements VocabularyInterface
 {
 
-    function __construct(VocabularyRepository $repo,protected ZipInterface $zipService ){
+    function __construct(private readonly VocabularyRepository $repo, protected ZipInterface $zipService ){
 
     }
 
-    public function getList(): array
+    public function getList(): Collection|false
     {
         try{
             return $this->repo->getAll();
@@ -104,4 +104,13 @@ class VocabularyService implements VocabularyInterface
         }
     }
 
+    function getNextPreviousVocabulary(Vocabulary $vocabulary,string $type = "next") : Vocabulary|false
+    {
+        try {
+            return $this->repo->getNextPrevious($vocabulary->id,$type) ?? false;
+        } catch (Exception $exception) {
+            Log::error("VocabularyService: getNextVocabulary - ".$exception->getMessage());
+            return false;
+        }
+    }
 }

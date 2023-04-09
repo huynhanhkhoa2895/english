@@ -23,4 +23,9 @@ class Student extends Model
     {
         return $this->belongsToMany(Vocabulary::class)->withPivot("student_id");
     }
+
+    public function practices(): BelongsToMany
+    {
+        return $this->belongsToMany(Practice::class)->withPivot("student_id");
+    }
 }
