@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\PracticeController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\PassportAuthController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\PassportAuthController;
+use App\Http\Controllers\Api\PracticeController;
+use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VocabularyController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,7 @@ Route::resource('lesson', LessonController::class);
 Route::resource('vocabulary', VocabularyController::class);
 Route::middleware('auth:api')->group(function () {
     Route::resource('practice', PracticeController::class);
+    Route::resource('student', StudentController::class)->middleware(\App\Http\Middleware\EnsureTokenStudent::class);
     Route::resource('user', UserController::class);
 
 });

@@ -17,4 +17,9 @@ class Lesson extends Model
     {
         return $this->belongsToMany(Vocabulary::class)->withPivot("lesson_id");
     }
+
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(Student::class)->withPivot("lesson_id");
+    }
 }

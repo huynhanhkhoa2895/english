@@ -1,25 +1,32 @@
 <?php
 
-namespace App\Filament\Resources\StudentResource\RelationManagers;
+namespace App\Filament\Resources\LessonResource\RelationManagers;
 
-use App\Filament\Resources\PracticeResource;
+use App\Filament\Resources\LessonResource;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PracticesRelationManager extends RelationManager
+class StudentsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'practices';
+    protected static string $relationship = 'students';
 
     protected static ?string $recordTitleAttribute = 'name';
-    /**
-     * @var Forms\ComponentContainer|\Illuminate\Contracts\View\View|mixed|null
-     */
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+            ]);
+    }
 
     public static function table(Table $table): Table
     {
@@ -35,7 +42,7 @@ class PracticesRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\Action::make("view")->action(function (Model $record): mixed {
-                    $resource = PracticeResource::class;
+                    $resource = LessonResource::class;
                     return redirect($resource::getUrl('edit',[$record->id]));
                 }),
                 Tables\Actions\DetachAction::make(),

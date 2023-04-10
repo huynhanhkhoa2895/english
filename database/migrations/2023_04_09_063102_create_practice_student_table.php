@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('practice_id')->constrained('practice')->onDelete('cascade');
             $table->string("point",15)->nullable();
             $table->string("note")->nullable();
+            $table->date("due_date")->nullable();
             $table->timestamps();
         });
     }

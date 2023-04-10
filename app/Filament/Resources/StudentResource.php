@@ -71,6 +71,7 @@ class StudentResource extends Resource
     {
         return [
             RelationManagers\PracticesRelationManager::class,
+            RelationManagers\LessonsRelationManager::class,
         ];
     }
 

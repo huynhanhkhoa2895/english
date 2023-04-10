@@ -14,6 +14,13 @@ class PraticeQuestionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this->id,
+            "type" => $this->type,
+            "title" =>  $this->title,
+            "description" =>  $this->description,
+            "contents" => PraticeQuestionContentResource::collection($this->whenLoaded("contents")),
+            "createdAt" => $this->created_at
+        ];
     }
 }
