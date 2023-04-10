@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PracticeResource\Pages;
 use App\Filament\Resources\PracticeResource\RelationManagers;
 use App\Models\Practice;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -46,7 +47,7 @@ class PracticeResource extends Resource
                         'listening' => 'Listening',
                     ])->required()->default('a1'),
                 TextInput::make('instructions')->maxLength(255),
-                MarkdownEditor::make('content')
+                RichEditor::make('content')
                     ->required()
                     ->columnSpanFull(),
                 SpatieMediaLibraryFileUpload::make('media')
