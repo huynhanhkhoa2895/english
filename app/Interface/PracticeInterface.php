@@ -1,10 +1,10 @@
 <?php
 namespace App\Interface;
 
-use App\Models\Practice;
+use App\Http\Resources\PraticeResource;
 use Illuminate\Support\Collection;
 
 interface PracticeInterface{
     function getList(): Collection;
-    function getById(string $id): Practice;
+    function getById(string $id): PraticeResource|false;
 }

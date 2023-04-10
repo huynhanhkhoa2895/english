@@ -3,12 +3,11 @@
 namespace App\Services;
 
 use App\Interface\PracticeInterface;
-use App\Models\Practice;
-use App\Repositories\LessonRepository;
-use App\Repositories\VocabularyRepository;
+use App\Repositories\PracticeRepository;
 use Illuminate\Support\Collection;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Http\Resources\PraticeResource;
 
 class PracticeService implements PracticeInterface
 {
@@ -22,8 +21,14 @@ class PracticeService implements PracticeInterface
         return $this->repo->getAll()->load("questions");
     }
 
-    function getById(string $id): Practice
+    function getById(string $id): PraticeResource|false
     {
-        return $this->repo->find($id);
+        try{
+            return new PraticeResource($this->repo->find($id)->load("questions"));
+        } catch (Exception $exception) {
+            Log::error("PracticeService: getById - ".$exception->getMessage());
+        }
+        return false;
+
     }
 }

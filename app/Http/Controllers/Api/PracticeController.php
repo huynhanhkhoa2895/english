@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Interface\PracticeInterface;
 use Illuminate\Http\Request;
 
 class PracticeController extends Controller
 {
+    function __construct(private readonly PracticeInterface $practiceService){
+    }
     /**
      * Display a listing of the resource.
      */
@@ -36,7 +39,8 @@ class PracticeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = $this->practiceService->getById($id);
+        return response()->json(["data"=>$data]);
     }
 
     /**
