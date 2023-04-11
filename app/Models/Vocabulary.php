@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -47,6 +48,11 @@ class Vocabulary extends Model implements HasMedia
     public function exam(): BelongsToMany
     {
         return $this->belongsToMany(Exam::class);
+    }
+
+    public function results(): MorphToMany
+    {
+        return $this->morphToMany(Result::class, 'question');
     }
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void

@@ -7,11 +7,13 @@ use App\Interface\PracticeInterface;
 use App\Interface\VocabularyInterface;
 use App\Interface\ZipInterface;
 use App\Interface\StudentInterface;
+use App\Interface\ResultInterface;
 use App\Services\LessonService;
 use App\Services\PracticeService;
 use App\Services\VocabularyService;
 use App\Services\ZipService;
 use App\Services\StudentService;
+use App\Services\ResultService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ZipInterface::class, ZipService::class);
         $this->app->bind(PracticeInterface::class, PracticeService::class);
         $this->app->bind(StudentInterface::class, StudentService::class);
+        $this->app->bind(ResultInterface::class, ResultService::class);
 
     }
 

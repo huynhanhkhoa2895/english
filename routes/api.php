@@ -4,10 +4,10 @@ use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\PassportAuthController;
 use App\Http\Controllers\Api\PracticeController;
 use App\Http\Controllers\Api\StudentController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ResultController;
 use App\Http\Controllers\Api\VocabularyController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\EnsureTokenStudent;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login'])->name("login");
-Route::resource('lesson', LessonController::class);
-Route::resource('vocabulary', VocabularyController::class);
-Route::middleware('auth:api')->group(function () {
-    Route::resource('practice', PracticeController::class);
-    Route::resource('student', StudentController::class)->middleware(\App\Http\Middleware\EnsureTokenStudent::class);
-    Route::resource('user', UserController::class);
 
+Route::middleware(['auth:api'])->group(function () {
+    Route::resource('practice', PracticeController::class);
+    Route::resource('student', StudentController::class)->middleware(EnsureTokenStudent::class);
+    Route::resource('lesson', LessonController::class);
+    Route::resource('vocabulary', VocabularyController::class);
+    Route::resource('result', ResultController::class);
 });

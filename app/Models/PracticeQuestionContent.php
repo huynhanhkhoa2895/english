@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class PracticeQuestionContent extends Model
 {
@@ -19,5 +20,10 @@ class PracticeQuestionContent extends Model
     public function question(): BelongsTo
     {
         return $this->belongsTo(Practice::class);
+    }
+
+    public function results(): MorphToMany
+    {
+        return $this->morphToMany(Result::class, 'question');
     }
 }

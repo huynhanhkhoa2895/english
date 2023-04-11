@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\PracticeQuestionContent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Student extends Authenticatable implements JWTSubject
 {
@@ -46,6 +48,15 @@ class Student extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Lesson::class)->withPivot("student_id");
     }
 
+    public function resultQuestion(): MorphToMany
+    {
+        return $this->morphedByMany(PracticeQuestionContent::class, 'question');
+    }
+
+    public function resultVocabularies(): MorphToMany
+    {
+        return $this->morphedByMany(Vocabulary::class, 'question');
+    }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

@@ -34,12 +34,12 @@ class PracticeResource extends Resource
                     ->maxLength(255),
                 Select::make('level')
                     ->options([
-                        'a1' => 'A1',
-                        'a2' => 'A2',
-                        'b1' => 'B1',
-                        'b2' => 'B2',
-                        'c1' => 'C1',
-                        'c2' => 'C2',
+                        'A1' => 'A1',
+                        'A2' => 'A2',
+                        'B1' => 'B1',
+                        'B2' => 'B2',
+                        'C1' => 'C1',
+                        'C2' => 'C2',
                     ])->required()->default('a1'),
                 Select::make('type')
                     ->options([
@@ -51,12 +51,12 @@ class PracticeResource extends Resource
                     ->required()
                     ->columnSpanFull(),
                 SpatieMediaLibraryFileUpload::make('media')
-                    ->acceptedFileTypes(['video/*','audio/*','image/*'])
-                    ->columnSpanFull()
+                    ->acceptedFileTypes(['audio/*','image/*'])
                     ->getUploadedFileNameForStorageUsing(function (Practice $record,TemporaryUploadedFile $file): string {
                         $array = explode(".", $file->getClientOriginalName());
                         return Str::slug($record->name).".".end($array);
                     }),
+                TextInput::make('link_video')->maxLength(255),
                 Repeater::make('questions')
                     ->relationship()
                     ->columnSpanFull()
@@ -81,6 +81,7 @@ class PracticeResource extends Resource
                                     ->required()
                                     ->maxLength(255),
                                 TextInput::make('answer')
+                                    ->required()
                                     ->maxLength(255),
                         ])
                     ])

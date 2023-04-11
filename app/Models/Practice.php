@@ -21,7 +21,8 @@ class Practice extends Model implements HasMedia
         'type',
         'instructions',
         'media',
-        'content'
+        'content',
+        'link_video'
     ];
 
     public function questions(): HasMany
