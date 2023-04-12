@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ResultRequest;
 use Illuminate\Http\Request;
 use App\Interface\ResultInterface;
 
@@ -16,6 +17,7 @@ class ResultController extends Controller
     public function index()
     {
         //
+        return response()->json(["data"=>200]);
     }
 
     /**
@@ -23,7 +25,9 @@ class ResultController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            "data" => 200
+        ]);
 
     }
 
@@ -32,10 +36,9 @@ class ResultController extends Controller
      */
     public function store(ResultRequest $request)
     {
-        //
-        $result = $this->resultService->createResult($request->validated());
-        response()->json([
-            "data" => $result
+        $request->validated();
+        return response()->json([
+            "data" => 200
         ]);
     }
 
@@ -45,6 +48,9 @@ class ResultController extends Controller
     public function show(string $id)
     {
         //
+        return response()->json([
+            "data" => 200
+        ]);
     }
 
     /**
@@ -53,6 +59,9 @@ class ResultController extends Controller
     public function edit(string $id)
     {
         //
+        return response()->json([
+            "data" => 200
+        ]);
     }
 
     /**
@@ -61,6 +70,9 @@ class ResultController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        return response()->json([
+            "data" => 200
+        ]);
     }
 
     /**

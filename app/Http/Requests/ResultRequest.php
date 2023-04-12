@@ -22,11 +22,12 @@ class ResultRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "question_id" => 'bail|required|integer',
-            "question_type" => 'bail|required|max:255',
-            "correct_answer" => 'bail|required|max:255',
-            "answer" => 'bail|required|max:255',
-            "result" => 'bail|required|boolean',
+            "data.*.question_id" => 'bail|required',
+            "data.*.question_id" => 'bail|required|integer',
+            "data.*.question_type" => 'bail|required|max:255',
+            "data.*.correct_answer" => 'bail|required|max:255',
+            "data.*.answer" => 'bail|required|max:255',
+            "data.*.result" => 'bail|required|boolean',
         ];
     }
 }

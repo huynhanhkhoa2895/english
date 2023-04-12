@@ -69,6 +69,7 @@ class PracticeResource extends Resource
                             ->options([
                                 'true_false' => 'True/False',
                                 'fill_in' => 'Fill in',
+                                'multiple_choice' => 'Multiple Choice',
                             ])->required()->default('true_false'),
                         MarkdownEditor::make('description')
                             ->required(),
@@ -83,6 +84,12 @@ class PracticeResource extends Resource
                                 TextInput::make('answer')
                                     ->required()
                                     ->maxLength(255),
+                                Repeater::make('values')
+                                    ->schema([
+                                        TextInput::make('label'),
+                                        TextInput::make('value'),
+                                    ])
+                                    ->columns(2)
                         ])
                     ])
             ]);

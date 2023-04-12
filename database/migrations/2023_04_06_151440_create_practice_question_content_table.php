@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('question_id')->constrained('practice_question')->cascadeOnDelete();
             $table->string('question');
             $table->string('answer')->nullable();
+            $table->string('values')->nullable();
             $table->timestamps();
         });
     }
