@@ -18,6 +18,7 @@ class PraticeQuestionContentResource extends JsonResource
             "id" => $this->id,
             "question" => $this->question,
             "answer" =>  $this->answer,
+            "values" =>  $this->values,
         ];
     }
 }

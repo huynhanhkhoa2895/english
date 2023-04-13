@@ -15,6 +15,11 @@ class PracticeQuestionContent extends Model
     protected $fillable = [
         'answer',
         'question',
+        'values'
+    ];
+
+    protected $casts = [
+        'values' => 'array',
     ];
 
     public function question(): BelongsTo
