@@ -18,7 +18,7 @@ class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -72,6 +72,7 @@ class StudentResource extends Resource
         return [
             RelationManagers\PracticesRelationManager::class,
             RelationManagers\LessonsRelationManager::class,
+            RelationManagers\VocabulariesRelationManager::class,
         ];
     }
 

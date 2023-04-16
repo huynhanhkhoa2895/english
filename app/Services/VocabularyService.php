@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\VocabularyCollection;
 use App\Imports\VocabularyImport;
 use App\Exports\VocabularyExport;
 use App\Interface\VocabularyInterface;
@@ -27,10 +28,10 @@ class VocabularyService implements VocabularyInterface
 
     }
 
-    public function getList(): Collection|false
+    public function getList(?string $relation,?string $id,?int $page,?int $limit): VocabularyCollection|false
     {
         try{
-            return $this->repo->getAll();
+            return new VocabularyCollection($this->repo->getAll());
         } catch (Exception $exception) {
             Log::error("VocabularyService: getList - ".$exception->getMessage());
             return false;

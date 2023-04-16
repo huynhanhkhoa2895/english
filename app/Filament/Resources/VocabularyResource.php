@@ -6,6 +6,7 @@ use App\Filament\Resources\VocabularyResource\Pages;
 use App\Filament\Resources\VocabularyResource\RelationManagers;
 use App\Interface\VocabularyInterface;
 use App\Models\Lesson;
+use App\Models\Student;
 use App\Models\Vocabulary;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -29,7 +30,7 @@ class VocabularyResource extends Resource
 {
     protected static ?string $model = Vocabulary::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-server';
 
     public static function form(Form $form): Form
     {
@@ -74,7 +75,7 @@ class VocabularyResource extends Resource
             ->columns([
                 TextColumn::make('vocabulary')->sortable()->searchable(),
                 TextColumn::make('parts_of_speech')->sortable(),
-                TextColumn::make('parts_of_speech')->label('Transcript'),
+                TextColumn::make('transcript')->label('Transcript'),
                 TextColumn::make('categories.name')->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
                 TextColumn::make('updated_at')->dateTime()->sortable()
@@ -87,6 +88,8 @@ class VocabularyResource extends Resource
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
                     ]),
+                SelectFilter::make('student')
+                    ->relationship("students","name"),
                 Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('created_at'),
@@ -112,6 +115,18 @@ class VocabularyResource extends Resource
                         Forms\Components\Select::make('lessonId')
                             ->label('Lesson')
                             ->options(Lesson::query()->pluck('name', 'id'))
+                            ->required(),
+                    ]),
+                BulkAction::make('attachStudent')
+                    ->action(function (Collection $records, array $data): void {
+                        foreach ($records as $record) {
+                            $record->students()->sync($data['studentId']);
+                        }
+                    })
+                    ->form([
+                        Forms\Components\Select::make('studentId')
+                            ->label('Student')
+                            ->options(Student::query()->pluck('name', 'id'))
                             ->required(),
                     ]),
                 BulkAction::make('exportExcel')
@@ -140,7 +155,7 @@ class VocabularyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\StudentsRelationManager::class
         ];
     }
 

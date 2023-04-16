@@ -7,4 +7,5 @@ use Illuminate\Support\Collection;
 interface PracticeInterface{
     function getList(): Collection;
     function getById(string $id): PraticeResource|false;
+    function createVocabularyPractice(array $data): PraticeResource|false;
 }

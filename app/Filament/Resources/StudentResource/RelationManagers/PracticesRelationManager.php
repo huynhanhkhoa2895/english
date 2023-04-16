@@ -3,13 +3,13 @@
 namespace App\Filament\Resources\StudentResource\RelationManagers;
 
 use App\Filament\Resources\PracticeResource;
+use App\Models\Practice;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Components\Select;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Contracts\HasRelationshipTable;
 use Illuminate\Database\Eloquent\Model;
 
 class PracticesRelationManager extends RelationManager
@@ -26,12 +26,33 @@ class PracticesRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('due_date')
+                    ->date()
+                    ->getStateUsing( function (Model $record,HasRelationshipTable $livewire){
+                        return $livewire->ownerRecord->practices()->firstWhere("practice_id",$record->id)->pivot->due_date;
+                    }),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make(),
+                Tables\Actions\Action::make("attach")
+                    ->label("Attach")
+                    ->action(function (array $data,HasRelationshipTable $livewire): void {
+                        $livewire->ownerRecord->practices()->sync([
+                            [
+                                "practice_id" => $data["student_id"],
+                                "due_date" => $data["due_date"],
+                            ]
+                        ]);
+                    })
+                    ->form([
+                        Select::make('practice_id')
+                            ->options(Practice::all()->pluck('name', 'id'))
+                            ->searchable(),
+                        Forms\Components\DatePicker::make('due_date'),
+                    ])
+                    ->color('success'),
             ])
             ->actions([
                 Tables\Actions\Action::make("view")->action(function (Model $record): mixed {
@@ -42,7 +63,6 @@ class PracticesRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
                 Tables\Actions\DetachBulkAction::make(),
             ]);
     }

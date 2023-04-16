@@ -36,10 +36,14 @@ class ResultController extends Controller
      */
     public function store(ResultRequest $request)
     {
-        $request->validated();
-        return response()->json([
-            "data" => 200
-        ]);
+
+        $datas = $request->validated() ;
+        $datas = collect($datas['data']);
+        $result = $datas->map(function($data){
+            return $this->resultService->createResult($data);
+        });
+
+        return response()->json($result);
     }
 
     /**

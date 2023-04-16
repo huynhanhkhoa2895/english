@@ -2,12 +2,19 @@
 
 namespace App\Filament\Resources\PracticeResource\RelationManagers;
 
+use App\Interface\VocabularyInterface;
+use App\Models\Practice;
+use App\Models\Student;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Contracts\HasRelationshipTable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class StudentsRelationManager extends RelationManager
 {
@@ -44,13 +51,34 @@ class StudentsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('due_date')
+                    ->date()
+                    ->getStateUsing( function (Model $record,HasRelationshipTable $livewire){
+                        return $livewire->ownerRecord->students()->firstWhere("student_id",$record->id)->pivot->due_date;
+                    }),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
-                Tables\Actions\AttachAction::make(),
+//                Tables\Actions\AttachAction::make(),
+                Tables\Actions\Action::make("attach")
+                    ->label("Attach")
+                    ->action(function (array $data,HasRelationshipTable $livewire): void {
+                        $livewire->ownerRecord->students()->sync([
+                            [
+                                "student_id" => $data["student_id"],
+                                "due_date" => $data["due_date"],
+                            ]
+                        ]);
+                    })
+                    ->form([
+                        Select::make('student_id')
+                        ->options(Student::all()->pluck('name', 'id'))
+                        ->searchable(),
+                        Forms\Components\DatePicker::make('due_date'),
+                    ])
+                    ->color('success'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -58,7 +86,6 @@ class StudentsRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
                 Tables\Actions\DetachBulkAction::make(),
             ]);
     }

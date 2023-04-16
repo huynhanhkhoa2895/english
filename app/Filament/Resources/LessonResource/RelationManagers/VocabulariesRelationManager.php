@@ -70,7 +70,6 @@ class VocabulariesRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\DetachBulkAction::make(),
-                Tables\Actions\DeleteBulkAction::make(),
             ])
             ->defaultSort('vocabulary');
     }

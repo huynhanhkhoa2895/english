@@ -15,6 +15,7 @@ class PraticeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $media = $this->getFirstMedia();
         return [
             "id" => $this->id,
             "name" => $this->name,
@@ -22,6 +23,11 @@ class PraticeResource extends JsonResource
             "type" =>  $this->type,
             "instructions" =>  $this->instructions,
             "content" =>  $this->content,
+            "media" => [
+                "url" => $media->getUrl(),
+                "type" => $media->mime_type
+            ],
+            "link_video" => $this->link_video,
             "questions" => PraticeQuestionResource::collection($this->whenLoaded("questions")->load("contents") ?? []),
             "createdAt" => $this->created_at
         ];

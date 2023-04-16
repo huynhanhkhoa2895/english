@@ -4,6 +4,9 @@ namespace App\Models;
 
 use App\Models\PracticeQuestionContent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -33,14 +36,15 @@ class Student extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+
     public function vocabularies(): BelongsToMany
     {
-        return $this->belongsToMany(Vocabulary::class)->withPivot("student_id");
+        return $this->belongsToMany(Vocabulary::class)->using(StudentVocabulary::class)->withPivot('point', 'repeat');
     }
 
     public function practices(): BelongsToMany
     {
-        return $this->belongsToMany(Practice::class)->withPivot("student_id");
+        return $this->belongsToMany(Practice::class)->using(PracticeStudent::class)->withPivot("due_date");
     }
 
     public function lessons(): BelongsToMany
@@ -50,12 +54,17 @@ class Student extends Authenticatable implements JWTSubject
 
     public function resultQuestion(): MorphToMany
     {
-        return $this->morphedByMany(PracticeQuestionContent::class, 'question');
+        return $this->morphedByMany(PracticeQuestionContent::class, 'question','result')->withPivot('result','correct_answer','answer');
     }
 
     public function resultVocabularies(): MorphToMany
     {
-        return $this->morphedByMany(Vocabulary::class, 'question');
+        return $this->morphedByMany(Vocabulary::class, 'question','result')->withPivot('result','correct_answer','answer');;
+    }
+
+    public function results(): HasMany
+    {
+        return $this->hasMany(Result::class);
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

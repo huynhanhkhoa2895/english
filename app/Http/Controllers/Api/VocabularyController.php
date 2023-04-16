@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Interface\VocabularyInterface;
 use App\Models\Vocabulary;
 use Illuminate\Http\Request;
 
 class VocabularyController extends Controller
 {
+    function __construct(private readonly VocabularyInterface $vocabularyService){
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
     }
 
     /**

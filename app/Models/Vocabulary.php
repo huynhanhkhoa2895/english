@@ -42,7 +42,7 @@ class Vocabulary extends Model implements HasMedia
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class)->withPivot("vocabulary_id");
+        return $this->belongsToMany(Student::class)->using(StudentVocabulary::class)->withPivot('point', 'repeat');
     }
 
     public function exam(): BelongsToMany

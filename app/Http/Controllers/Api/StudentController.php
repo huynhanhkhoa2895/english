@@ -37,9 +37,9 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request,string $id)
     {
-        $student = $this->studentService->getById($id);
+        $student = $this->studentService->handle($request,$id);
         return response()->json(["data"=>$student]);
     }
 

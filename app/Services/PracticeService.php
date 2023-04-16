@@ -8,6 +8,10 @@ use Illuminate\Support\Collection;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\PraticeResource;
+use App\Models\Practice;
+use App\Models\PracticeQuestion;
+use App\Models\PracticeQuestionContent;
+
 
 class PracticeService implements PracticeInterface
 {
@@ -30,5 +34,15 @@ class PracticeService implements PracticeInterface
         }
         return false;
 
+    }
+
+    function createVocabularyPractice(array $data): PraticeResource|false
+    {
+        try{
+            $level = $data["level"];
+        } catch (Exception $exception) {
+            Log::error("PracticeService: createVocabularyPractice - ".$exception->getMessage());
+        }
+        return false;
     }
 }

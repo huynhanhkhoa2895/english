@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PracticeResource\Pages;
 use App\Filament\Resources\PracticeResource\RelationManagers;
 use App\Models\Practice;
-use Filament\Forms\Components\RichEditor;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -23,7 +23,7 @@ class PracticeResource extends Resource
 {
     protected static ?string $model = Practice::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     public static function form(Form $form): Form
     {
@@ -45,9 +45,10 @@ class PracticeResource extends Resource
                     ->options([
                         'reading' => 'Reading',
                         'listening' => 'Listening',
+                        'vocabulary' => 'Vocabulary',
                     ])->required()->default('a1'),
                 TextInput::make('instructions')->maxLength(255),
-                RichEditor::make('content')
+                TinyEditor::make('content')
                     ->required()
                     ->columnSpanFull(),
                 SpatieMediaLibraryFileUpload::make('media')

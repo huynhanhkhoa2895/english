@@ -25,4 +25,17 @@ class VocabularyRepository extends BaseRepository
     {
         return $this->model->where("id",$type === "next" ? "<" : ">",$id)->orderBy("id",$type === "next" ? "desc" : "asc")->first();
     }
+
+    public function getByStudent($studentId) {
+        dd($this
+            ->model
+            ->students
+            ->toSql()
+        );
+        return $this
+                ->model
+                ->students
+                ->wherePivot("student_id",$studentId)
+                ->get();
+    }
 }
