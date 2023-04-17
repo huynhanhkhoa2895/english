@@ -44,7 +44,7 @@ class Student extends Authenticatable implements JWTSubject
 
     public function practices(): BelongsToMany
     {
-        return $this->belongsToMany(Practice::class)->using(PracticeStudent::class)->withPivot("due_date");
+        return $this->belongsToMany(Practice::class)->withPivot("student_id","due_date");
     }
 
     public function lessons(): BelongsToMany
