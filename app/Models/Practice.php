@@ -32,7 +32,7 @@ class Practice extends Model implements HasMedia
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class)->using(PracticeStudent::class)->withPivot("due_date");
+        return $this->belongsToMany(Student::class)->withPivot("student_id","due_date");
     }
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
