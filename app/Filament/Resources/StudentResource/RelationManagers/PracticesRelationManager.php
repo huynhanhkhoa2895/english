@@ -41,7 +41,7 @@ class PracticesRelationManager extends RelationManager
                     ->action(function (array $data,HasRelationshipTable $livewire): void {
                         $livewire->ownerRecord->practices()->sync([
                             [
-                                "practice_id" => $data["student_id"],
+                                "practice_id" => $data["practice_id"],
                                 "due_date" => $data["due_date"],
                             ]
                         ]);
