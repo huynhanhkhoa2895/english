@@ -56,6 +56,10 @@ class StudentsRelationManager extends RelationManager
                     ->getStateUsing( function (Model $record,HasRelationshipTable $livewire){
                         return $livewire->ownerRecord->students()->firstWhere("student_id",$record->id)->pivot->due_date;
                     }),
+                Tables\Columns\TextColumn::make('point')
+                    ->getStateUsing( function (Model $record,HasRelationshipTable $livewire){
+                        return $livewire->ownerRecord->students()->firstWhere("student_id",$record->id)->pivot->point;
+                    }),
             ])
             ->filters([
                 //
@@ -81,7 +85,7 @@ class StudentsRelationManager extends RelationManager
                     ->color('success'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make("view")->label("Result")->modalContent(fn (Model $record) => view("filament.pages.actions.viewResult",["record"=>$record])),
                 Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

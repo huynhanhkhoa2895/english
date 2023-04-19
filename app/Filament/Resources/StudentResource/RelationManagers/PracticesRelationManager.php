@@ -55,10 +55,6 @@ class PracticesRelationManager extends RelationManager
                     ->color('success'),
             ])
             ->actions([
-                Tables\Actions\Action::make("view")->action(function (Model $record): mixed {
-                    $resource = PracticeResource::class;
-                    return redirect($resource::getUrl('edit',[$record->id]));
-                }),
                 Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
