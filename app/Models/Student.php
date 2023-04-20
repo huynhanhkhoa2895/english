@@ -64,7 +64,7 @@ class Student extends Authenticatable implements JWTSubject
 
     public function results(): HasMany
     {
-        return $this->hasMany(Result::class);
+        return $this->hasMany(PracticeStudentResult::class);
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

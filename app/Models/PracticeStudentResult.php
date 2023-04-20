@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Result extends Model
+class PracticeStudentResult extends Model
 {
     use HasFactory;
-    protected $table = "result";
+    protected $table = "practice_student_result";
 
     protected $fillable = [
-        'student_id',
-        'question_id',
-        'question_type',
+        'question',
         'correct_answer',
         'answer',
         'result'
     ];
 
-    public function student(): BelongsTo
+    public function practiceStudentReceive(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(PracticeStudentReceive::class);
     }
 }

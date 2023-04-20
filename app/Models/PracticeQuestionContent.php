@@ -29,6 +29,6 @@ class PracticeQuestionContent extends Model
 
     public function results(): MorphToMany
     {
-        return $this->morphToMany(Result::class, 'question');
+        return $this->morphToMany(PracticeStudentResult::class, 'question');
     }
 }

@@ -4,20 +4,21 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResultRequest;
-use App\Interface\PracticeInterface;
+use App\Interface\ReceiveInterface;
 use Illuminate\Http\Request;
 
-class PracticeController extends Controller
+class PracticeReceive extends Controller
 {
-    function __construct(private readonly PracticeInterface $practiceService){
+    public function __construct(private readonly ReceiveInterface $receiveService)
+    {
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        return response()->json(["data"=>$data]);
     }
 
     /**
@@ -31,9 +32,12 @@ class PracticeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ResultRequest $request)
     {
-        //
+        $datas = $request->validated();
+        $datasResult = collect($datas['data']);
+        $this->receiveService->receivePractice($datasResult);
+        return response()->json(200);
     }
 
     /**
@@ -41,8 +45,7 @@ class PracticeController extends Controller
      */
     public function show(string $id)
     {
-        $data = $this->practiceService->getById($id);
-        return response()->json(["data"=>$data]);
+        //
     }
 
     /**

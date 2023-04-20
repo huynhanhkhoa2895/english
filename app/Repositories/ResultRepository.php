@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Result;
+use App\Models\PracticeStudentResult;
 use App\Repositories\BaseRepository;
 
 class ResultRepository extends BaseRepository
@@ -14,6 +14,6 @@ class ResultRepository extends BaseRepository
 
     public function init()
     {
-        $this->model = app(Result::class);
+        $this->model = app(PracticeStudentResult::class);
     }
 }

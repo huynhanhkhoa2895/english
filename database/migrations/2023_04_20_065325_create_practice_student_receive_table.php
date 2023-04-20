@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('practice_student_receive', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('student')->onDelete('cascade');
-            $table->foreignId('practice_id')->constrained('practice')->onDelete('cascade');
+            $table->foreignId('practice_student_id')->constrained('practice_student')->onDelete('cascade');
             $table->string("point",15)->nullable();
             $table->string("note")->nullable();
             $table->timestamps();

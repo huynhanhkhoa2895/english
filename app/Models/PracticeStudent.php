@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 class PracticeStudent extends Pivot
 {
@@ -13,6 +14,7 @@ class PracticeStudent extends Pivot
 
     protected $fillable = [
         'due_date',
+        'just_one_time'
     ];
 
     function student(): BelongsTo
@@ -23,5 +25,10 @@ class PracticeStudent extends Pivot
     function practice(): BelongsTo
     {
         return $this->belongsTo(Practice::class);
+    }
+
+    function receives(): HasMany
+    {
+        return $this->hasMany(PracticeStudentReceive::class,"practice_student_receive_id","id");
     }
 }

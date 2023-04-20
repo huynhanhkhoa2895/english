@@ -85,7 +85,7 @@ class StudentsRelationManager extends RelationManager
                     ->color('success'),
             ])
             ->actions([
-                Tables\Actions\Action::make("view")->label("Result")->modalContent(fn (Model $record) => view("filament.pages.actions.viewResult",["record"=>$record])),
+                Tables\Actions\Action::make("view")->label("PracticeStudentResult")->modalContent(fn (Model $record) => view("filament.pages.actions.viewResult",["record"=>$record])),
                 Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

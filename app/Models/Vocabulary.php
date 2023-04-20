@@ -52,7 +52,7 @@ class Vocabulary extends Model implements HasMedia
 
     public function results(): MorphToMany
     {
-        return $this->morphToMany(Result::class, 'question');
+        return $this->morphToMany(PracticeStudentResult::class, 'question');
     }
 
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void

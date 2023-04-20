@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('practice_student_result', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('practice_id')->nullable()->constrained('practice')->cascadeOnDelete();
-            $table->foreignId('student_id')->nullable()->constrained('student')->cascadeOnDelete();
+            $table->foreignId('practice_student_receive_id')->nullable()->constrained('practice_student_receive')->cascadeOnDelete();
             $table->string("question");
             $table->string("correct_answer");
             $table->string("answer")->nullable();

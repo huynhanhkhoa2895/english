@@ -17,9 +17,6 @@ class ResultService implements ResultInterface
     {
         try{
             $data["student_id"] = auth("api")->id();
-            $data["question_type"] = $data["question_type"] === "question" ?
-                "App\Models\PracticeQuestionContent":
-                "App\Models\Lesson";
             return (bool)$this->repo->create($data);
         } catch (Exception $exception) {
             Log::error("ResultService: createResult - ".$exception->getMessage());

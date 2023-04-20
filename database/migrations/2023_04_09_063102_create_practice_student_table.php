@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('student')->onDelete('cascade');
             $table->foreignId('practice_id')->constrained('practice')->onDelete('cascade');
             $table->date("due_date")->nullable();
+            $table->boolean("just_one_time")->nullable();
             $table->timestamps();
         });
     }
