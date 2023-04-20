@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('practice_student', function (Blueprint $table) {
+        Schema::create('practice_student_receive', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('student')->onDelete('cascade');
             $table->foreignId('practice_id')->constrained('practice')->onDelete('cascade');
-            $table->date("due_date")->nullable();
+            $table->string("point",15)->nullable();
+            $table->string("note")->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('practice_student');
+        Schema::dropIfExists('practice_student_result');
     }
 };

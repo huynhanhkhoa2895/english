@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('result', function (Blueprint $table) {
+        Schema::create('practice_student_result', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('practice_id')->nullable()->constrained('practice')->cascadeOnDelete();
             $table->foreignId('student_id')->nullable()->constrained('student')->cascadeOnDelete();
-            $table->unsignedBigInteger("question_id")->index();
-            $table->string("question_type");
+            $table->string("question");
             $table->string("correct_answer");
             $table->string("answer")->nullable();
             $table->boolean("result");
