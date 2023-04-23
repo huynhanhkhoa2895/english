@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('practice_student_result', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('practice_student_receive_id')->nullable()->constrained('practice_student_receive')->cascadeOnDelete();
+            $table->foreignId('practice_student_submit_id')->constrained('practice_student_submit')->onDelete('cascade');
             $table->string("question");
+            $table->string("question_type");
             $table->string("correct_answer");
             $table->string("answer")->nullable();
             $table->boolean("result");
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('result');
+        Schema::dropIfExists('practice_student_result');
     }
 };

@@ -62,6 +62,7 @@ class Student extends Authenticatable implements JWTSubject
         return $this->morphedByMany(Vocabulary::class, 'question','result')->withPivot('result','correct_answer','answer');;
     }
 
+
     public function results(): HasMany
     {
         return $this->hasMany(PracticeStudentResult::class);

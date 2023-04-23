@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class ResultRequest extends FormRequest
 {
@@ -22,10 +24,23 @@ class ResultRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "data.*.question_title" => 'bail|required|max:255',
             "data.*.question" => 'bail|required|max:255',
+            "data.*.question_type" => 'bail|required|max:255',
             "data.*.correct_answer" => 'bail|required|max:255',
             "data.*.answer" => 'bail|required|max:255',
             "data.*.result" => 'bail|required|boolean',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = [
+            'status' => 'failure',
+            'status_code' => 400,
+            'message' => $validator->errors(),
+            'errors' => 'Bad Request',
+        ];
+
+        throw new HttpResponseException(response()->json($response, 400));
     }
 }

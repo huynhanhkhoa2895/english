@@ -24,8 +24,8 @@ class PraticeResource extends JsonResource
             "instructions" =>  $this->instructions,
             "content" =>  $this->content,
             "media" => [
-                "url" => $media->getUrl(),
-                "type" => $media->mime_type
+                "url" => empty($media) ? null : $media->getUrl(),
+                "type" =>empty($media) ? null :  $media->mime_type
             ],
             "link_video" => $this->link_video,
             "questions" => PraticeQuestionResource::collection($this->whenLoaded("questions")->load("contents") ?? []),

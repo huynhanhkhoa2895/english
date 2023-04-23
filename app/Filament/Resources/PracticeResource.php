@@ -25,6 +25,8 @@ class PracticeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
+    protected static ?string $navigationGroup = 'Practice';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -132,6 +134,7 @@ class PracticeResource extends Resource
             'index' => Pages\ListPractices::route('/'),
             'create' => Pages\CreatePractice::route('/create'),
             'edit' => Pages\EditPractice::route('/{record}/edit'),
+            'result' => Pages\Result::route('/result'),
         ];
     }
 }

@@ -56,10 +56,6 @@ class StudentsRelationManager extends RelationManager
                     ->getStateUsing( function (Model $record,HasRelationshipTable $livewire){
                         return $livewire->ownerRecord->students()->firstWhere("student_id",$record->id)->pivot->due_date;
                     }),
-                Tables\Columns\TextColumn::make('point')
-                    ->getStateUsing( function (Model $record,HasRelationshipTable $livewire){
-                        return $livewire->ownerRecord->students()->firstWhere("student_id",$record->id)->pivot->point;
-                    }),
             ])
             ->filters([
                 //
@@ -69,23 +65,25 @@ class StudentsRelationManager extends RelationManager
                 Tables\Actions\Action::make("attach")
                     ->label("Attach")
                     ->action(function (array $data,HasRelationshipTable $livewire): void {
-                        $livewire->ownerRecord->students()->sync([
-                            [
-                                "student_id" => $data["student_id"],
-                                "due_date" => $data["due_date"],
-                            ]
+                        $student = $livewire->ownerRecord->students();
+                        $dataSync = collect($data["student_id"])->map(fn ($student_id)  => [
+                            "student_id" => $student_id,
+                            "due_date" => $data["due_date"],
                         ]);
+                        $student->sync($dataSync);
                     })
                     ->form([
                         Select::make('student_id')
-                        ->options(Student::all()->pluck('name', 'id'))
-                        ->searchable(),
+                            ->label("Student")
+                            ->multiple()
+                            ->options(Student::all()->pluck('name', 'id'))
+                            ->searchable()
+                            ->required(),
                         Forms\Components\DatePicker::make('due_date'),
                     ])
                     ->color('success'),
             ])
             ->actions([
-                Tables\Actions\Action::make("view")->label("PracticeStudentResult")->modalContent(fn (Model $record) => view("filament.pages.actions.viewResult",["record"=>$record])),
                 Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

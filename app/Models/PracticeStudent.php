@@ -11,6 +11,7 @@ class PracticeStudent extends Pivot
     use HasFactory;
 
     protected $table = "practice_student";
+    protected $with = ['student','submits'];
 
     protected $fillable = [
         'due_date',
@@ -27,8 +28,8 @@ class PracticeStudent extends Pivot
         return $this->belongsTo(Practice::class);
     }
 
-    function receives(): HasMany
+    function submits(): HasMany
     {
-        return $this->hasMany(PracticeStudentReceive::class,"practice_student_receive_id","id");
+        return $this->hasMany(PracticeStudentSubmit::class,"practice_student_id","id");
     }
 }

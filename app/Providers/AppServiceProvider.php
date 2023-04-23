@@ -2,21 +2,25 @@
 
 namespace App\Providers;
 
+use App\Filament\Resources\PracticeResource;
 use App\Interface\LessonInterface;
 use App\Interface\PracticeInterface;
-use App\Interface\ReceiveInterface;
+use App\Interface\SubmitInterface;
 use App\Interface\VocabularyInterface;
 use App\Interface\ZipInterface;
 use App\Interface\StudentInterface;
 use App\Interface\ResultInterface;
 use App\Services\LessonService;
 use App\Services\PracticeService;
-use App\Services\ReceiveService;
+use App\Services\SubmitService;
 use App\Services\VocabularyService;
 use App\Services\ZipService;
 use App\Services\StudentService;
 use App\Services\ResultService;
 use Illuminate\Support\ServiceProvider;
+use Filament\Facades\Filament;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PracticeInterface::class, PracticeService::class);
         $this->app->bind(StudentInterface::class, StudentService::class);
         $this->app->bind(ResultInterface::class, ResultService::class);
-        $this->app->bind(ReceiveInterface::class, ReceiveService::class);
+        $this->app->bind(SubmitInterface::class, SubmitService::class);
 
     }
 
@@ -42,5 +46,21 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        Filament::serving(function () {
+            Filament::registerStyles([
+                'resources/css/app.css',
+            ]);
+            Filament::registerNavigationItems([
+                NavigationItem::make('Result')
+                    ->url(PracticeResource::getUrl('result'))
+                    ->icon('heroicon-o-presentation-chart-line')
+                    ->group('Practice')
+            ]);
+            Filament::registerNavigationGroups([
+                NavigationGroup::make()
+                    ->label('Practice')
+                    ->icon('heroicon-o-academic-cap'),
+            ]);
+        });
     }
 }

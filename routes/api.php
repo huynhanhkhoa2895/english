@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\PracticeController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\ResultController;
 use App\Http\Controllers\Api\VocabularyController;
-use App\Http\Controllers\Api\PracticeReceive;
+use App\Http\Controllers\Api\PracticeSubmit;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureTokenStudent;
 /*
@@ -24,7 +24,7 @@ Route::post('login', [PassportAuthController::class, 'login'])->name("login");
 
 Route::middleware(['auth:api'])->group(function () {
     Route::resource('practice', PracticeController::class);
-    Route::resource('receive', PracticeReceive::class);
+    Route::resource('submit', PracticeSubmit::class);
     Route::resource('student', StudentController::class)->middleware(EnsureTokenStudent::class);
     Route::resource('lesson', LessonController::class);
     Route::resource('vocabulary', VocabularyController::class);

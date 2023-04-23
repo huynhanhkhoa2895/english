@@ -12,14 +12,16 @@ class PracticeStudentResult extends Model
     protected $table = "practice_student_result";
 
     protected $fillable = [
+        'practice_student_submit_id',
+        'question_type',
         'question',
         'correct_answer',
         'answer',
         'result'
     ];
 
-    public function practiceStudentReceive(): BelongsTo
+    public function PracticeStudentSubmit(): BelongsTo
     {
-        return $this->belongsTo(PracticeStudentReceive::class);
+        return $this->belongsTo(PracticeStudentSubmit::class);
     }
 }

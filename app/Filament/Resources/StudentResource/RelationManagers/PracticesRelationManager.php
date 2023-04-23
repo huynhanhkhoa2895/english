@@ -48,6 +48,8 @@ class PracticesRelationManager extends RelationManager
                     })
                     ->form([
                         Select::make('practice_id')
+                            ->label('Practice')
+                            ->required()
                             ->options(Practice::all()->pluck('name', 'id'))
                             ->searchable(),
                         Forms\Components\DatePicker::make('due_date'),
