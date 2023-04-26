@@ -108,7 +108,7 @@ class VocabularyResource extends Resource
                 BulkAction::make('attachLesson')
                     ->action(function (Collection $records, array $data): void {
                         foreach ($records as $record) {
-                            $record->lessons()->sync($data['lessonId']);
+                            $record->lessons()->syncWithoutDetaching($data['lessonId']);
                         }
                     })
                     ->form([
@@ -120,7 +120,7 @@ class VocabularyResource extends Resource
                 BulkAction::make('attachStudent')
                     ->action(function (Collection $records, array $data): void {
                         foreach ($records as $record) {
-                            $record->students()->sync($data['studentId']);
+                            $record->students()->syncWithoutDetaching($data['studentId']);
                         }
                     })
                     ->form([

@@ -19,6 +19,6 @@ class LessonRepository extends BaseRepository
 
     public function syncVocabulary($data)
     {
-        return $this->model->vocabularies()->sync($data);
+        return $this->model->vocabularies()->syncWithoutDetaching($data);
     }
 }

@@ -33,7 +33,7 @@ class LessonService implements LessonInterface
             $vocabulary = $this->vocaRepo->getByDate($data,['id'])->map(function(Vocabulary $model){
                 return $model->id;
             });
-            $model->vocabularies()->sync($vocabulary->toArray());
+            $model->vocabularies()->syncWithoutDetaching($vocabulary->toArray());
             return true;
         } catch (Exception $exception) {
             Log::error("LessonService: attachVocabulary - ".$exception->getMessage());

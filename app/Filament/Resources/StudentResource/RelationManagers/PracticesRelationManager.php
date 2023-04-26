@@ -39,7 +39,7 @@ class PracticesRelationManager extends RelationManager
                 Tables\Actions\Action::make("attach")
                     ->label("Attach")
                     ->action(function (array $data,HasRelationshipTable $livewire): void {
-                        $livewire->ownerRecord->practices()->sync([
+                        $livewire->ownerRecord->practices()->syncWithoutDetaching([
                             [
                                 "practice_id" => $data["practice_id"],
                                 "due_date" => $data["due_date"],

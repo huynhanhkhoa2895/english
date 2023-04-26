@@ -70,7 +70,7 @@ class StudentsRelationManager extends RelationManager
                             "student_id" => $student_id,
                             "due_date" => $data["due_date"],
                         ]);
-                        $student->sync($dataSync);
+                        $student->syncWithoutDetaching($dataSync);
                     })
                     ->form([
                         Select::make('student_id')
