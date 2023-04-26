@@ -66,11 +66,14 @@ class StudentsRelationManager extends RelationManager
                     ->label("Attach")
                     ->action(function (array $data,HasRelationshipTable $livewire): void {
                         $student = $livewire->ownerRecord->students();
-                        $dataSync = collect($data["student_id"])->map(fn ($student_id)  => [
-                            "student_id" => $student_id,
-                            "due_date" => $data["due_date"],
-                        ]);
-                        $student->syncWithoutDetaching($dataSync);
+                        $student->syncWithoutDetaching($data["student_id"]);
+                        if(!empty($data["due_date"])){
+                            foreach ($data["student_id"] as $student_id) {
+                                $student->updateExistingPivot($student_id, [
+                                    'due_date' => $data["due_date"],
+                                ]);
+                            }
+                        }
                     })
                     ->form([
                         Select::make('student_id')

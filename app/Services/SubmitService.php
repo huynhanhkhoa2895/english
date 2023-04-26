@@ -36,7 +36,6 @@ class SubmitService implements SubmitInterface
             }
             return true;
         } catch (Exception $exception) {
-            dd($exception);
             Log::error("SubmitService: submitPractice - ".$exception->getMessage());
         }
         return false;
