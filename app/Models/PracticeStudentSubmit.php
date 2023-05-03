@@ -15,6 +15,8 @@ class PracticeStudentSubmit extends Model
         'question_title',
         'practice_student_id',
         'point',
+        'created_at',
+        'updated_at'
     ];
 
     public function practiceStudent(): BelongsTo

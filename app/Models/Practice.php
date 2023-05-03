@@ -22,7 +22,9 @@ class Practice extends Model implements HasMedia
         'instructions',
         'media',
         'content',
-        'link_video'
+        'link_video',
+        'created_at',
+        'updated_at'
     ];
 
     public function questions(): HasMany

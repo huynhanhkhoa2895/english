@@ -24,6 +24,8 @@ class Student extends Authenticatable implements JWTSubject
         'email',
         'position',
         'password',
+        'created_at',
+        'updated_at'
     ];
 
     /**

@@ -17,7 +17,9 @@ class PracticeStudentResult extends Model
         'question',
         'correct_answer',
         'answer',
-        'result'
+        'result',
+        'created_at',
+        'updated_at'
     ];
 
     public function PracticeStudentSubmit(): BelongsTo

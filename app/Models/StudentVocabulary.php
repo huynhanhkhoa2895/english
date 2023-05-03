@@ -15,6 +15,8 @@ class StudentVocabulary extends Pivot
     protected $fillable = [
         'point',
         'repeat',
+        'created_at',
+        'updated_at'
     ];
 
     function student(): BelongsTo

@@ -17,6 +17,8 @@ class PracticeQuestion extends Model
         'title',
         'type',
         'description',
+        'created_at',
+        'updated_at'
     ];
 
     public function contents(): HasMany

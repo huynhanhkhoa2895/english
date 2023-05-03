@@ -15,7 +15,9 @@ class PracticeQuestionContent extends Model
     protected $fillable = [
         'answer',
         'question',
-        'values'
+        'values',
+        'created_at',
+        'updated_at'
     ];
 
     protected $casts = [

@@ -19,8 +19,8 @@ class PracticeRepository extends BaseRepository
         $this->model = app(Practice::class);
     }
 
-    public function getByStudent($student_id,$cols = ['*']) {
-        return PracticeStudent::where("student_id",$student_id)->select($cols)->first();
+    public function getByStudent($practice_id,$student_id,$cols = ['*']) {
+        return PracticeStudent::where("student_id",$student_id)->where("practice_id",$practice_id)->select($cols)->first();
     }
 
     public function getListByStudent($studentId){

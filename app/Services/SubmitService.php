@@ -15,23 +15,27 @@ class SubmitService implements SubmitInterface
 
     }
 
-    function submitPractice($dataResult): bool
+    function submitPractice($datas): bool
     {
         try{
-            $data["practice_student_id"] = $this->repoPractice->getByStudent(auth("api")->id(),"id")->id;
+            $dataResult = collect($datas['data']);
+            $data["practice_student_id"] = $this->repoPractice->getByStudent($datas['practice_id'],auth("api")->id(),"id")->id;
+            $data["question_title"] = $datas['question_title'];
             $submit = $this->repo->create($data);
+
             if($submit) {
                 $point = 0;
                 $total = count($dataResult);
                 foreach ($dataResult as $data) {
                     $data["practice_student_submit_id"] = $submit->id;
+
+                    $data["question_type"] = $datas['question_type'];
                     if($data['result']) {
                         $point++;
                     }
                     $this->resultService->createResult($data);
                 }
                 $submit->point = round(($point/$total),3)*10;
-                $submit->question_title = $data['question_title'];
                 $submit->save();
             }
             return true;

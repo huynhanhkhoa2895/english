@@ -35,8 +35,7 @@ class PracticeSubmit extends Controller
     public function store(ResultRequest $request)
     {
         $datas = $request->validated();
-        $datasResult = collect($datas['data']);
-        $result = $this->submitService->submitPractice($datasResult);
+        $result = $this->submitService->submitPractice($datas);
         if(!$result) {
             return response()->json([
                 "status" => 500

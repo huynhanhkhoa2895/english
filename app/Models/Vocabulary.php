@@ -27,7 +27,9 @@ class Vocabulary extends Model implements HasMedia
         'sound',
         'category_id',
         'parts_of_speech',
-        'definition'
+        'definition',
+        'created_at',
+        'updated_at'
     ];
 
     function categories(): \Illuminate\Database\Eloquent\Relations\BelongsTo

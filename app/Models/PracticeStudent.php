@@ -15,7 +15,9 @@ class PracticeStudent extends Pivot
 
     protected $fillable = [
         'due_date',
-        'just_one_time'
+        'just_one_time',
+        'created_at',
+        'updated_at'
     ];
 
     function student(): BelongsTo
