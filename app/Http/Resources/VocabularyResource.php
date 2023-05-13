@@ -20,6 +20,7 @@ class VocabularyResource extends JsonResource
             "vocabulary" => $this->vocabulary,
             "translate" =>  $this->translate,
             "transcript" => $this->transcript,
+            "definition" => $this->definition,
             "parts_of_speech" => $this->parts_of_speech,
             "spelling" =>  $this->spelling,
             "example" =>  $this->example,
