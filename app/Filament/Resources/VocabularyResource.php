@@ -25,6 +25,7 @@ use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Livewire\TemporaryUploadedFile;
+use Closure;
 
 class VocabularyResource extends Resource
 {
@@ -62,8 +63,8 @@ class VocabularyResource extends Resource
                     ->visibility('public')
                     ->acceptedFileTypes(['audio/mpeg'])
                     ->maxSize(100)
-                    ->getUploadedFileNameForStorageUsing(function (Vocabulary $record): string {
-                        return $record->vocabulary.".mp3";
+                    ->getUploadedFileNameForStorageUsing(function (Closure $get): string {
+                        return  $get('vocabulary').".mp3";
                     })
                     ->enableDownload()
             ]);
