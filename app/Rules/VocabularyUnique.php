@@ -20,7 +20,7 @@ class VocabularyUnique implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $sv = app(VocabularyInterface::class);
-        if(!$sv->validateVocabulary($this->data['vocabulary'],$this->data['parts_of_speech'])){
+        if(!$sv->validateVocabulary($this->data['vocabulary'],$this->data['parts_of_speech'],$this->data['id'])){
             $fail("The {$attribute} is exist.");
         }
     }

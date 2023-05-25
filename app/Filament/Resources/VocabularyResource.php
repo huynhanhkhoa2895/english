@@ -42,6 +42,7 @@ class VocabularyResource extends Resource
                     ->rules([
                         function(Closure $get) {
                             return new VocabularyUnique([
+                                "id" => $get("id"),
                                 "vocabulary" => $get('vocabulary'),
                                 "parts_of_speech" => $get('parts_of_speech')
                             ]);
@@ -62,6 +63,7 @@ class VocabularyResource extends Resource
                     ->rules([
                         function(Closure $get) {
                             return new VocabularyUnique([
+                                "id" => $get("id"),
                                 "vocabulary" => $get('vocabulary'),
                                 "parts_of_speech" => $get('parts_of_speech')
                             ]);

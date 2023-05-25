@@ -13,6 +13,7 @@ return new class extends Migration
     {
         //
         Schema::table('vocabulary', function (Blueprint $table) {
+            $table->dropUnique('vocabulary_vocabulary_unique');
             $table->unique(['vocabulary','parts_of_speech']);
         });
     }
@@ -24,6 +25,7 @@ return new class extends Migration
     {
         Schema::table('practice', function (Blueprint $table) {
             $table->dropUnique(['vocabulary','parts_of_speech']);
+            $table->unique('vocabulary');
         });
     }
 };
