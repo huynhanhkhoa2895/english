@@ -121,7 +121,7 @@ class VocabularyService implements VocabularyInterface
             $data = $this->repo->getVocabularyByPartOfSpeech($vocabulary,$part_of_speech);
             if(empty($id)){
                 return empty($data);
-            }else if($id === $data){
+            }else if($id == $data->id && $part_of_speech === $data->parts_of_speech && $vocabulary === $data->vocabulary){
                 return true;
             }
             return false;
