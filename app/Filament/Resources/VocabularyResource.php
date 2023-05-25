@@ -8,6 +8,7 @@ use App\Interface\VocabularyInterface;
 use App\Models\Lesson;
 use App\Models\Student;
 use App\Models\Vocabulary;
+use App\Rules\VocabularyUnique;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -37,7 +38,16 @@ class VocabularyResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('vocabulary')->unique(ignoreRecord: true)->required(),
+                TextInput::make('vocabulary')
+                    ->rules([
+                        function(Closure $get) {
+                            return new VocabularyUnique([
+                                "vocabulary" => $get('vocabulary'),
+                                "parts_of_speech" => $get('parts_of_speech')
+                            ]);
+                        }
+                    ])
+                    ->required(),
                 TextInput::make('translate'),
                 TextInput::make('spelling')->label('Transcript'),
                 Forms\Components\Select::make('category_id')
@@ -48,7 +58,16 @@ class VocabularyResource extends Resource
                         'v' => 'Verb (v)',
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
-                    ]),
+                    ])
+                    ->rules([
+                        function(Closure $get) {
+                            return new VocabularyUnique([
+                                "vocabulary" => $get('vocabulary'),
+                                "parts_of_speech" => $get('parts_of_speech')
+                            ]);
+                        }
+                    ])
+                    ->required(),
                 MarkdownEditor::make('definition')->columnSpanFull(),
                 MarkdownEditor::make('example')->columnSpanFull(),
                 SpatieMediaLibraryFileUpload::make('image')

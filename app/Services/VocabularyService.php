@@ -114,4 +114,15 @@ class VocabularyService implements VocabularyInterface
             return false;
         }
     }
+
+    function validateVocabulary(string $vocabulary,string $part_of_speech) : bool
+    {
+        try {
+            $data = $this->repo->getVocabularyByPartOfSpeech($vocabulary,$part_of_speech);
+            return empty($data);
+        } catch (Exception $exception) {
+            Log::error("VocabularyService: validateVocabulary - ".$exception->getMessage());
+            return false;
+        }
+    }
 }

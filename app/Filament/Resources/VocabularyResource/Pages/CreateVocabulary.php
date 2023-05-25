@@ -13,6 +13,7 @@ class CreateVocabulary extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['created_by'] = auth()->id();
+        $data['vocabulary'] = trim($data['vocabulary']);
         return $data;
     }
 }
