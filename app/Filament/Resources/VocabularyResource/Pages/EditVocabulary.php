@@ -13,6 +13,12 @@ class EditVocabulary extends EditRecord
 {
     protected static string $resource = VocabularyResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['vocabulary'] = strtolower(trim($data['vocabulary']));
+        return $data;
+    }
+
     protected function getActions(): array
     {
         return [
