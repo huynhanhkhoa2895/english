@@ -119,13 +119,11 @@ class VocabularyService implements VocabularyInterface
     {
         try {
             $data = $this->repo->getVocabularyByPartOfSpeech($vocabulary,$part_of_speech);
-            if(empty($id)){
-                return empty($data);
-            }else if($id == $data->id && $part_of_speech === $data->parts_of_speech && $vocabulary === $data->vocabulary){
+            if($id == $data->id && $part_of_speech === $data->parts_of_speech && $vocabulary === $data->vocabulary){
                 return true;
+            }else{
+                return empty($data);
             }
-            return false;
-
         } catch (Exception $exception) {
             Log::error("VocabularyService: validateVocabulary - ".$exception->getMessage());
             return false;
