@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Vocabulary;
+use App\Models\VocabularyRelationship;
 use Illuminate\Support\Collection;
 
 class VocabularyRepository extends BaseRepository

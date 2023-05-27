@@ -7,6 +7,7 @@ use App\Imports\VocabularyImport;
 use App\Exports\VocabularyExport;
 use App\Interface\VocabularyInterface;
 use App\Interface\ZipInterface;
+use App\Repositories\VocabularyRelationshipRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\Vocabulary;
 use Google\Cloud\TextToSpeech\V1\AudioConfig;
@@ -24,7 +25,7 @@ use Excel;
 class VocabularyService implements VocabularyInterface
 {
 
-    function __construct(private readonly VocabularyRepository $repo, protected ZipInterface $zipService ){
+    function __construct(private readonly VocabularyRepository $repo, protected ZipInterface $zipService, protected VocabularyRelationshipRepository $repoVocabularyRelationship){
 
     }
 
@@ -127,6 +128,36 @@ class VocabularyService implements VocabularyInterface
             }
         } catch (Exception $exception) {
             Log::error("VocabularyService: validateVocabulary - ".$exception->getMessage());
+            return false;
+        }
+        return false;
+    }
+
+    function syncRelationship(string $idVocabulary1,string $idVocabulary2,string $relationship): bool
+    {
+        try {
+            $list = collect([$idVocabulary1,$idVocabulary2]);
+            $dataId = $list->map(function (string $id) use ($relationship) {
+                return [
+                    (int)$id,
+                    $this->repoVocabularyRelationship->getRelation($id,$relationship,['vocabulary_relationship'])->map(fn ($item) => $item->vocabulary_relationship)
+                ];
+            });
+
+            $list = $dataId->flatten()->unique();
+
+            foreach ($list as $index=>$vocabulary) {
+                $qty = $index+1;
+                while (isset($list[$qty])) {
+                    $vocabulary2 = $list[$qty];
+                     $this->repoVocabularyRelationship->syncVocabulary($vocabulary,$vocabulary2,$relationship);
+                    $qty++;
+                }
+            }
+
+            return true;
+        } catch (Exception $exception) {
+            Log::error("VocabularyService: syncRelationship - ".$exception->getMessage());
             return false;
         }
         return false;

@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Livewire\TemporaryUploadedFile;
 use Closure;
+use Filament\Tables\Filters\TernaryFilter;
 
 class VocabularyResource extends Resource
 {
@@ -97,8 +98,7 @@ class VocabularyResource extends Resource
             ->columns([
                 TextColumn::make('vocabulary')->sortable()->searchable(),
                 TextColumn::make('parts_of_speech')->sortable(),
-                TextColumn::make('transcript')->label('Transcript'),
-                TextColumn::make('categories.name')->sortable(),
+                TextColumn::make('lessons_count')->counts('lessons'),
                 TextColumn::make('created_at')->dateTime()->sortable(),
                 TextColumn::make('updated_at')->dateTime()->sortable()
             ])
@@ -112,6 +112,31 @@ class VocabularyResource extends Resource
                     ]),
                 SelectFilter::make('student')
                     ->relationship("students","name"),
+                TernaryFilter::make('has_lesson')
+                    ->nullable()
+                    ->attribute('lessons')
+                    ->queries(
+                        true: fn (Builder $query) => $query
+                            ->whereIn("id",function ($select){
+                                return $select->from("vocabulary")->select("vocabulary.id")
+                                    ->leftJoin("lesson_vocabulary","vocabulary.id","=","vocabulary_id")
+                                    ->groupBy('vocabulary.id')
+                                    ->havingRaw("COUNT(lesson_vocabulary.vocabulary_id) > ?",[0])
+                                    ->get();
+                            })
+                            ->get(),
+                        false: fn (Builder $query) => $query
+                            ->whereIn("id",function ($select){
+                                return $select->from("vocabulary")->select("vocabulary.id")
+                                    ->leftJoin("lesson_vocabulary","vocabulary.id","=","vocabulary_id")
+                                    ->groupBy('vocabulary.id')
+                                    ->havingRaw("COUNT(lesson_vocabulary.vocabulary_id) = ?",[0])
+                                    ->get();
+                            })
+                            ->get(),
+
+                    ),
+
                 Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('created_at'),
@@ -177,6 +202,7 @@ class VocabularyResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\VocabularyRelationshipRelationManager::class,
             RelationManagers\StudentsRelationManager::class
         ];
     }
