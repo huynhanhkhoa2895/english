@@ -25,6 +25,7 @@ class VocabularyRelationshipRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'vocabulary';
 
+    protected static ?string $title = "Vocabulary Relationship";
     public static function form(Form $form): Form
     {
         return $form
@@ -80,6 +81,8 @@ class VocabularyRelationshipRelationManager extends RelationManager
                 ->label("Vocabulary"),
                 Tables\Columns\TextColumn::make('vocabulary_relationship_vocabulary.parts_of_speech')
                 ->label("Parts of speech"),
+                Tables\Columns\TextColumn::make('vocabulary_relationship_vocabulary.relationship')
+                    ->label("Relationship"),
             ])
             ->filters([
                 //
