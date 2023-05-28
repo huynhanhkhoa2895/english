@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\VocabularyRepository;
+use Illuminate\Support\Facades\Http;
 use Excel;
 
 class VocabularyService implements VocabularyInterface
@@ -55,29 +56,74 @@ class VocabularyService implements VocabularyInterface
     {
         try {
             if(!Storage::disk('speech')->exists($text.'.mp3')){
-                $textToSpeechClient = new TextToSpeechClient([
-                    'credentials' => storage_path("app/english-381805-2094589455c0.json"),
-                    'keyFilename' => storage_path("app/english-381805-2094589455c0.json"),
-                    'projectId' => 'english-381805'
-                ]);
-
-                $input = new SynthesisInput();
-                $input->setText($text);
-                $voice = new VoiceSelectionParams();
-                $voice->setLanguageCode('en-US');
-                $audioConfig = new AudioConfig();
-                $audioConfig->setAudioEncoding(AudioEncoding::MP3);
-
-                $resp = $textToSpeechClient->synthesizeSpeech($input, $voice, $audioConfig);
-                $result = (bool) Storage::disk('speech')->put($text.'.mp3', $resp->getAudioContent());
-                if(!$result) {
-                    return false;
+                $useGoogle = false;
+                if(count(explode(" ",$text))>1){
+                    $useGoogle = true;
+                }else{
+                    $useGoogle = !$this->callApiDictionary($text);
+                }
+                if($useGoogle){
+                    $this->callApiGoogle($text);
                 }
             }
             return $text.'.mp3';
 
         } catch (Exception $exception) {
+            dd($exception);
             Log::error("VocabularyService: textToSpeach - ".$exception->getMessage());
+            return false;
+        }
+    }
+
+
+    private function callApiDictionary(string $text): bool
+    {
+        try {
+            $url = "https://dictionary.cambridge.org";
+            $response = Http::get($url."/dictionary/english/".$text);
+            $body = $response->body();
+            $pattern = '/<source [^>]*src="(.+)/';
+            preg_match_all($pattern,$body,$src);
+            $dataSrc = null;
+            foreach ($src[1] as $match){
+                $data = preg_match('/\/us_pron\//',$match);
+                if($data){
+                    $dataSrc = explode('"',$match)[0];
+                    break;
+                }
+            }
+            $contents = file_get_contents($url.$dataSrc);
+            return Storage::disk('speech')->put($text.".mp3", $contents);
+        } catch (Exception $exception){
+            Log::error("VocabularyService: callApiDictionary - ".$exception->getMessage());
+            return false;
+        }
+    }
+
+    private function callApiGoogle(string $text): bool
+    {
+        try {
+            $textToSpeechClient = new TextToSpeechClient([
+                'credentials' => storage_path("app/english-381805-2094589455c0.json"),
+                'keyFilename' => storage_path("app/english-381805-2094589455c0.json"),
+                'projectId' => 'english-381805'
+            ]);
+
+            $input = new SynthesisInput();
+            $input->setText($text);
+            $voice = new VoiceSelectionParams();
+            $voice->setLanguageCode('en-US');
+            $audioConfig = new AudioConfig();
+            $audioConfig->setAudioEncoding(AudioEncoding::MP3);
+
+            $resp = $textToSpeechClient->synthesizeSpeech($input, $voice, $audioConfig);
+            $result = (bool) Storage::disk('speech')->put($text.'.mp3', $resp->getAudioContent());
+            if(!$result) {
+                return false;
+            }
+            return true;
+        } catch (Exception $exception){
+            Log::error("VocabularyService: callApiGoogle - ".$exception->getMessage());
             return false;
         }
     }

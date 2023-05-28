@@ -12,8 +12,9 @@ class VocabularyObserver
         $vocabularyService = app(VocabularyInterface::class);
         if($path = $vocabularyService->textToSpeach(trim($vocabulary->vocabulary))) {
             if($vocabulary->sound !== $path) {
-                $vocabulary->sound = $path;
-                $vocabulary->save();
+                $v = Vocabulary::find($vocabulary->id);
+                $v->sound = $path;
+                $v->save();
             }
 
         }
