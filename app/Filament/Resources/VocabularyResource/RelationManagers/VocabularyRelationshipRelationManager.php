@@ -81,7 +81,7 @@ class VocabularyRelationshipRelationManager extends RelationManager
                 ->label("Vocabulary"),
                 Tables\Columns\TextColumn::make('vocabulary_relationship_vocabulary.parts_of_speech')
                 ->label("Parts of speech"),
-                Tables\Columns\TextColumn::make('vocabulary_relationship_vocabulary.relationship')
+                Tables\Columns\TextColumn::make('relationship')
                     ->label("Relationship"),
             ])
             ->filters([
