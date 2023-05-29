@@ -42,11 +42,16 @@ class LessonController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id,Request $request)
     {
         //
+        if($request->type === "timeout"){
+            $data = $this->lessonService->preparePracticeTimeout($id);
+        }else{
+            $data = new LessonResource($this->lessonService->getById($id)->load("vocabularies"));
+        }
         return response()->json([
-            "data" => new LessonResource($this->lessonService->getById($id)->load("vocabularies"))
+            "data" => $data
         ]);
     }
 

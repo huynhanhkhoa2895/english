@@ -18,6 +18,11 @@ class VocabularyRepository extends BaseRepository
         $this->model = app(Vocabulary::class);
     }
 
+    public function getModel()
+    {
+        return $this->model;
+    }
+
     public function getByDate($date,$col = ['*']) : Collection{
         return $this->model->whereDate("created_at",$date)->get($col);
     }

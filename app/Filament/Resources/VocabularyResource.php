@@ -50,7 +50,7 @@ class VocabularyResource extends Resource
                         }
                     ])
                     ->required(),
-                TextInput::make('translate'),
+                TextInput::make('translate')->required(),
                 TextInput::make('spelling')->label('Transcript'),
                 Forms\Components\Select::make('category_id')
                     ->relationship('categories', 'name'),

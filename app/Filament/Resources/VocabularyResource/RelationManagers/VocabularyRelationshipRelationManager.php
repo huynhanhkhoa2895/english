@@ -58,7 +58,7 @@ class VocabularyRelationshipRelationManager extends RelationManager
                         }
                     ])
                     ->required(),
-                TextInput::make('translate'),
+                TextInput::make('translate')->required(),
                 MarkdownEditor::make('definition')->columnSpanFull(),
                 MarkdownEditor::make('example')->columnSpanFull(),
                 FileUpload::make('sound')

@@ -41,4 +41,36 @@ class LessonService implements LessonInterface
         return false;
 
     }
+
+    function preparePracticeTimeout(string $id): Collection
+    {
+        try{
+            $allVoca = $this->vocaRepo->getModel()->whereNotNull("translate")->get(["vocabulary","translate"]);
+            $total = $allVoca->count();
+            $lesson = $this->repo->find($id)->load("vocabularies");
+            return $lesson->vocabularies->map(function($item) use ($total, $allVoca) {
+                $indexCorrect = rand(0,3);
+                $values = ["","","",""];
+                foreach ($values as $index=>$value){
+                    if($indexCorrect === $index){
+                        $values[$index] = $item->translate;
+                    }else{
+                        $voca = $allVoca[rand(0,$total)];
+                        while (in_array($voca->translate,$values) || empty($voca->translate) || $voca->vocabulary === $item->vocabulary){
+                            $voca = $allVoca[rand(0,$total)];
+                        }
+                        $values[$index] = $voca->translate;
+                    }
+                }
+                return [
+                    "question"=>$item->vocabulary,
+                    "values"=>$values
+                ];
+            });
+        } catch (Exception $exception) {
+            Log::error("LessonService: preparePracticeTimeout - ".$exception->getMessage());
+        }
+        return collect();
+
+    }
 }
