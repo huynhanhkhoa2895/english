@@ -21,12 +21,12 @@ use App\Http\Middleware\EnsureTokenStudent;
 */
 Route::post('register', [PassportAuthController::class, 'register']);
 Route::post('login', [PassportAuthController::class, 'login'])->name("login");
-Route::resource('lesson', LessonController::class);
 
 Route::middleware(['auth:api'])->group(function () {
     Route::resource('practice', PracticeController::class);
     Route::resource('submit', PracticeSubmit::class);
     Route::resource('student', StudentController::class)->middleware(EnsureTokenStudent::class);
+    Route::resource('lesson', LessonController::class);
     Route::resource('vocabulary', VocabularyController::class);
     Route::resource('result', ResultController::class);
 });
