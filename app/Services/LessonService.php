@@ -59,9 +59,9 @@ class LessonService implements LessonInterface
                             "translate"=>$item->translate,
                         ];
                     }else{
-                        $voca = $allVoca[rand(0,$total)];
+                        $voca = $allVoca[rand(0,$total-1)];
                         while (in_array($voca->translate,$values) || empty($voca->translate) || $voca->vocabulary === $item->vocabulary){
-                            $voca = $allVoca[rand(0,$total)];
+                            $voca = $allVoca[rand(0,$total-1)];
                         }
                         $values[$index] = [
                             "id"=>$voca->id,
