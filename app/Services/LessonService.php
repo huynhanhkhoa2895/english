@@ -63,7 +63,7 @@ class LessonService implements LessonInterface
                     }
                 }
                 return [
-                    "question"=>$item->vocabulary,
+                    "question"=>$item,
                     "values"=>$values
                 ];
             });
