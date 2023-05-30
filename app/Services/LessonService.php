@@ -45,7 +45,7 @@ class LessonService implements LessonInterface
     function preparePracticeTimeout(string $id): Collection
     {
         try{
-            $allVoca = $this->vocaRepo->getModel()->whereNotNull("translate")->get(["vocabulary","translate"]);
+            $allVoca = $this->vocaRepo->getModel()->whereNotNull("translate")->get(["id","vocabulary","translate"]);
             $total = $allVoca->count();
             $lesson = $this->repo->find($id)->load("vocabularies");
             return $lesson->vocabularies->map(function($item) use ($total, $allVoca) {
