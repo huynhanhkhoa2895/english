@@ -53,13 +53,13 @@ class LessonService implements LessonInterface
                 $values = ["","","",""];
                 foreach ($values as $index=>$value){
                     if($indexCorrect === $index){
-                        $values[$index] = $item->translate;
+                        $values[$index] = $item;
                     }else{
                         $voca = $allVoca[rand(0,$total)];
                         while (in_array($voca->translate,$values) || empty($voca->translate) || $voca->vocabulary === $item->vocabulary){
                             $voca = $allVoca[rand(0,$total)];
                         }
-                        $values[$index] = $voca->translate;
+                        $values[$index] = $voca;
                     }
                 }
                 return [
