@@ -59,11 +59,19 @@ class LessonService implements LessonInterface
                         while (in_array($voca->translate,$values) || empty($voca->translate) || $voca->vocabulary === $item->vocabulary){
                             $voca = $allVoca[rand(0,$total)];
                         }
-                        $values[$index] = $voca;
+                        $values[$index] = [
+                            "id"=>$voca->id,
+                            "vocabulary"=>$voca->vocabulary,
+                            "translate"=>$voca->translate,
+                        ];
                     }
                 }
                 return [
-                    "question"=>$item,
+                    "question"=>[
+                        "id"=>$item->id,
+                        "vocabulary"=>$item->vocabulary,
+                        "translate"=>$item->translate,
+                    ],
                     "values"=>$values
                 ];
             });
