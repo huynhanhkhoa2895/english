@@ -57,6 +57,7 @@ class LessonService implements LessonInterface
                             "id"=>$item->id,
                             "vocabulary"=>$item->vocabulary,
                             "translate"=>$item->translate,
+                            "parts_of_speech"=>$item->parts_of_speech
                         ];
                     }else{
                         $voca = $allVoca[rand(0,$total-1)];
