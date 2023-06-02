@@ -60,6 +60,8 @@ class VocabularyResource extends Resource
                         'v' => 'Verb (v)',
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
+                        'preposition' => 'Preposition',
+                        'pronoun' => 'Pronoun',
                     ])
                     ->rules([
                         function(Closure $get) {
