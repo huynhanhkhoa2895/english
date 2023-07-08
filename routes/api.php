@@ -29,4 +29,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::resource('lesson', LessonController::class);
     Route::resource('vocabulary', VocabularyController::class);
     Route::resource('result', ResultController::class);
+    Route::prefix('lesson')->group(function (){
+        Route::get('/getDetailList', [LessonController::class,'getDetailList']);
+    });
+
 });

@@ -17,6 +17,11 @@ class LessonRepository extends BaseRepository
         $this->model = app(Lesson::class);
     }
 
+    public function getAllWithId(array $id,$cols = ['*'])
+    {
+        return $this->model->whereIn("id",$id)->get($cols);
+    }
+
     public function syncVocabulary($data)
     {
         return $this->model->vocabularies()->syncWithoutDetaching($data);

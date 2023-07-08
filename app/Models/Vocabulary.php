@@ -15,6 +15,9 @@ class Vocabulary extends Model implements HasMedia
     use InteractsWithMedia;
     use HasFactory;
     protected $table = "vocabulary";
+    protected $casts = [
+        'is_phase' => 'boolean',
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -29,14 +32,12 @@ class Vocabulary extends Model implements HasMedia
         'category_id',
         'parts_of_speech',
         'definition',
+        'is_phase',
+        'priority',
+        'level',
         'created_at',
         'updated_at'
     ];
-
-    function categories(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Category::class,"category_id","id");
-    }
 
     public function lessons(): BelongsToMany
     {
@@ -46,6 +47,11 @@ class Vocabulary extends Model implements HasMedia
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class)->using(StudentVocabulary::class)->withPivot('point', 'repeat');
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class,'vocabulary_category')->using(VocabularyCategory::class);
     }
 
     public function exam(): BelongsToMany

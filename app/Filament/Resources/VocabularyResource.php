@@ -28,6 +28,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Livewire\TemporaryUploadedFile;
 use Closure;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Forms\Components\Toggle;
 
 class VocabularyResource extends Resource
 {
@@ -52,7 +53,9 @@ class VocabularyResource extends Resource
                     ->required(),
                 TextInput::make('translate')->required(),
                 TextInput::make('spelling')->label('Transcript'),
-                Forms\Components\Select::make('category_id')
+                Select::make('categories')
+                    ->multiple()
+                    ->preload()
                     ->relationship('categories', 'name'),
                 Select::make('parts_of_speech')
                     ->options([
@@ -60,8 +63,10 @@ class VocabularyResource extends Resource
                         'v' => 'Verb (v)',
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
+                        'conj' => 'Conjunction (conj)',
                         'preposition' => 'Preposition',
                         'pronoun' => 'Pronoun',
+
                     ])
                     ->rules([
                         function(Closure $get) {
@@ -73,8 +78,26 @@ class VocabularyResource extends Resource
                         }
                     ])
                     ->required(),
+                Select::make('priority')
+                    ->options([
+                        'normal' => 'Normal',
+                        'high' => 'High',
+                        'urgent' => 'Urgent',
+                    ])
+                    ->default('normal'),
+                Select::make('level')
+                    ->options([
+                        'A1' => 'A1',
+                        'A2' => 'A2',
+                        'B1' => 'B1',
+                        'B2' => 'B2',
+                        'C1' => 'C1',
+                        'C2' => 'C2',
+                    ]),
+                Toggle::make('is_phase')->inline(false)->disabled(),
                 MarkdownEditor::make('definition')->columnSpanFull(),
                 MarkdownEditor::make('example')->columnSpanFull(),
+
                 SpatieMediaLibraryFileUpload::make('image')
                     ->acceptedFileTypes(['image/*'])
                     ->getUploadedFileNameForStorageUsing(function (Vocabulary $record,TemporaryUploadedFile $file): string {

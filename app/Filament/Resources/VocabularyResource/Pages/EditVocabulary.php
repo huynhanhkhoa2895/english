@@ -16,6 +16,7 @@ class EditVocabulary extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['vocabulary'] = strtolower(trim($data['vocabulary']));
+        $data['is_phase'] = count(explode(" ",trim($data['vocabulary']))) > 0;
         return $data;
     }
 

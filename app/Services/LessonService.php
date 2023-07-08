@@ -5,11 +5,13 @@ namespace App\Services;
 use App\Interface\LessonInterface;
 use App\Models\Lesson;
 use App\Models\Vocabulary;
+use App\Models\VocabularyRelationship;
 use App\Repositories\LessonRepository;
 use App\Repositories\VocabularyRepository;
 use Illuminate\Support\Collection;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use DB;
 
 class LessonService implements LessonInterface
 {
@@ -17,14 +19,19 @@ class LessonService implements LessonInterface
 
     }
 
-    function getList(): Collection
+    function getList(array $id = []): Collection
     {
         return $this->repo->getAll()->load("vocabularies");
     }
 
-    function getById(string $id): Lesson
+    function getById(string|array $id): Lesson
     {
-        return $this->repo->find($id);
+        if(is_array($id)){
+            return $this->repo->getAllWithId($id)->load("vocabularies");
+        }else{
+            return $this->repo->find($id);
+        }
+
     }
 
     function attachVocabulary(string $from,mixed $data,$model): bool
@@ -45,11 +52,15 @@ class LessonService implements LessonInterface
     function preparePracticeTimeout(string $id): Collection
     {
         try{
-            $allVoca = $this->vocaRepo->getModel()->whereNotNull("translate")->get(["id","vocabulary","translate"]);
+            $allVoca = $this->vocaRepo
+                ->getModel()
+                ->whereNotNull("translate")
+                ->get(["id","vocabulary","translate"]);
             $total = $allVoca->count();
-            $lesson = $this->repo->find($id)->load("vocabularies");
-            return $lesson->vocabularies->map(function($item) use ($total, $allVoca) {
+            $lesson = $this->repo->find($id)->load("vocabularySynonyms");
+            return $lesson->vocabularySynonyms->map(function($item) use ($total, $allVoca) {
                 $indexCorrect = rand(0,3);
+                $listVocabularySynonyms = $item->vocabulary_relationship_main->map(fn (VocabularyRelationship $vocaRelationship)=>$vocaRelationship->vocabulary_relationship)->toArray();
                 $values = ["","","",""];
                 foreach ($values as $index=>$value){
                     if($indexCorrect === $index){
@@ -61,7 +72,12 @@ class LessonService implements LessonInterface
                         ];
                     }else{
                         $voca = $allVoca[rand(0,$total-1)];
-                        while (in_array($voca->translate,$values) || empty($voca->translate) || $voca->vocabulary === $item->vocabulary){
+                        while (
+                            in_array($voca->translate,$values) ||
+                            empty($voca->translate) ||
+                            $voca->vocabulary === $item->vocabulary ||
+                            in_array($voca->id,$listVocabularySynonyms)
+                        ){
                             $voca = $allVoca[rand(0,$total-1)];
                         }
                         $values[$index] = [

@@ -14,7 +14,7 @@ use Filament\Forms\Components\TextInput;
 
 class VocabularyRelationManager extends RelationManager
 {
-    protected static string $relationship = 'vocabulary';
+    protected static string $relationship = 'vocabularies';
 
     protected static ?string $recordTitleAttribute = 'vocabulary';
 
@@ -40,7 +40,7 @@ class VocabularyRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\AttachAction::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

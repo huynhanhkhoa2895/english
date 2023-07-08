@@ -14,6 +14,14 @@ class Lesson extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function vocabularySynonyms(): BelongsToMany
+    {
+        return $this->belongsToMany(Vocabulary::class)->withPivot("lesson_id")->with('vocabulary_relationship_main',function ($query){
+            return $query->where('relationship','synonyms');
+        });
+    }
+
     public function vocabularies(): BelongsToMany
     {
         return $this->belongsToMany(Vocabulary::class)->withPivot("lesson_id");

@@ -23,12 +23,12 @@ class LessonController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function getDetailList(Request $request)
     {
-        //
+        return response()->json([
+            "data" => new LessonCollection($this->lessonService->getById($request->ids))
+        ]);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\LessonResource\RelationManagers;
 
+use App\Filament\Resources\VocabularyResource;
 use App\Interface\LessonInterface;
 use App\Interface\VocabularyInterface;
 use Filament\Forms;
@@ -13,6 +14,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\DatePicker;
@@ -49,7 +51,6 @@ class VocabulariesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make(),
                 Tables\Actions\Action::make("import_excel")
                     ->button()
@@ -64,7 +65,10 @@ class VocabulariesRelationManager extends RelationManager
                     ->color('success')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make("view")->action(function (Model $record): mixed {
+                    $resource = VocabularyResource::class;
+                    return redirect($resource::getUrl('edit',[$record->id]));
+                }),
                 Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
