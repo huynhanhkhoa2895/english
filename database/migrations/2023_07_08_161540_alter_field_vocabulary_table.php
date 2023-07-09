@@ -15,6 +15,7 @@ return new class extends Migration
             $table->enum('priority',['normal','high','urgent'])->default('normal');
             $table->enum('level',['A1','A2','B1','B2','C1','C2'])->nullable();
             $table->boolean('is_phase')->default(false);
+            $table->dropForeign(['category_id']);
             $table->dropColumn('category_id');
         });
     }
