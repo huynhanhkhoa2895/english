@@ -24,8 +24,9 @@ class Lesson extends Model
 
     public function vocabularies(): BelongsToMany
     {
-        return $this->belongsToMany(Vocabulary::class)->withPivot("lesson_id");
+        return $this->belongsToMany(Vocabulary::class)->withPivot("lesson_id")->with('vocabulary_relationship_main');
     }
+
 
     public function students(): BelongsToMany
     {

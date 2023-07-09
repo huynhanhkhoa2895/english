@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LessonResource extends JsonResource
+class VocabularyRelationshipResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +16,8 @@ class LessonResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "vocabularies" => VocabularyWithRelationshipResource::collection($this->whenLoaded("vocabularies")->load("categories")),
-            "createdAt" => $this->created_at
+            "vocabulary" => new VocabularyResource($this->vocabulary_relationship_vocabulary),
+            "relationship" => $this->relationship
         ];
     }
 }

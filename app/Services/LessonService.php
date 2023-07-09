@@ -11,7 +11,7 @@ use App\Repositories\VocabularyRepository;
 use Illuminate\Support\Collection;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use DB;
+
 
 class LessonService implements LessonInterface
 {
