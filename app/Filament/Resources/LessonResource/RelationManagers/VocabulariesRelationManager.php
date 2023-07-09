@@ -46,6 +46,7 @@ class VocabulariesRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('vocabulary'),
+                Tables\Columns\TextColumn::make('parts_of_speech'),
             ])
             ->filters([
                 //

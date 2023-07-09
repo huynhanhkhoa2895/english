@@ -123,10 +123,12 @@ class VocabularyResource extends Resource
             ->columns([
                 TextColumn::make('vocabulary')->sortable()->searchable(),
                 TextColumn::make('parts_of_speech')->sortable(),
+                TextColumn::make('categories.name')->sortable(),
                 TextColumn::make('lessons_count')->counts('lessons'),
                 TextColumn::make('created_at')->dateTime()->sortable(),
                 TextColumn::make('updated_at')->dateTime()->sortable()
             ])
+
             ->filters([
                 SelectFilter::make('parts_of_speech')
                     ->options([
@@ -134,9 +136,29 @@ class VocabularyResource extends Resource
                         'v' => 'Verb (v)',
                         'adj' => 'Adjective (adj)',
                         'adv' => 'Adverb (adv)',
+                        'conj' => 'Conjunction (conj)',
+                        'preposition' => 'Preposition',
+                        'pronoun' => 'Pronoun',
+
                     ]),
-                SelectFilter::make('student')
-                    ->relationship("students","name"),
+                SelectFilter::make('level')
+                    ->options([
+                        'A1' => 'A1',
+                        'A2' => 'A2',
+                        'B1' => 'B1',
+                        'B2' => 'B2',
+                        'C1' => 'C1',
+                        'C2' => 'C2',
+                    ]),
+                SelectFilter::make('priority')
+                    ->options([
+                        'normal' => 'Normal',
+                        'high' => 'High',
+                        'urgent' => 'Urgent',
+                    ]),
+                SelectFilter::make('categories')
+                    ->multiple()
+                    ->relationship('categories', 'name'),
                 TernaryFilter::make('has_lesson')
                     ->nullable()
                     ->attribute('lessons')
@@ -161,7 +183,9 @@ class VocabularyResource extends Resource
                             ->get(),
 
                     ),
-
+                Filter::make('is_phase')
+                    ->toggle()
+                    ->query(fn (Builder $query): Builder => $query->where('is_phase', true)),
                 Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('created_at'),
@@ -230,6 +254,20 @@ class VocabularyResource extends Resource
             RelationManagers\VocabularyRelationshipRelationManager::class,
             RelationManagers\StudentsRelationManager::class
         ];
+    }
+
+    public function isTableSearchable(): bool
+    {
+        return true;
+    }
+
+    protected function applySearchToTableQuery(Builder $query): Builder
+    {
+        if (filled($searchQuery = $this->getTableSearchQuery())) {
+            $query->whereIn('id', Vocabulary::search($searchQuery)->keys());
+        }
+
+        return $query;
     }
 
     public static function getPages(): array

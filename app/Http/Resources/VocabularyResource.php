@@ -22,10 +22,13 @@ class VocabularyResource extends JsonResource
             "transcript" => $this->spelling,
             "definition" => $this->definition,
             "parts_of_speech" => $this->parts_of_speech,
+            "level" => $this->level,
+            "priority" => $this->definition,
+            "is_phase" => $this->is_phase,
             "spelling" =>  $this->spelling,
             "example" =>  $this->example,
             "sound" =>  $this->sound,
-            "category" => new CategoryResource($this->whenLoaded("categories") ?? null),
+            "category" => new CategoryCollection($this->whenLoaded("categories") ?? null),
             "createdAt" => $this->created_at
         ];
     }

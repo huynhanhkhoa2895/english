@@ -24,13 +24,18 @@ class LessonService implements LessonInterface
         return $this->repo->getAll()->load("vocabularies");
     }
 
-    function getById(string|array $id): Lesson
+    function getById(string|array $id): Lesson|null|Collection
     {
-        if(is_array($id)){
-            return $this->repo->getAllWithId($id)->load("vocabularies");
-        }else{
-            return $this->repo->find($id);
+        try{
+            if(is_array($id)){
+                return $this->repo->getAllWithId($id)->load("vocabularies");
+            }else{
+                return $this->repo->find($id)->load("vocabularies");
+            }
+        }catch (Exception $exception) {
+            Log::error("LessonService: attachVocabulary - ".$exception->getMessage());
         }
+        return null;
 
     }
 

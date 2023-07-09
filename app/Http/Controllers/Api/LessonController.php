@@ -26,8 +26,9 @@ class LessonController extends Controller
 
     public function getDetailList(Request $request)
     {
+        $data = $this->lessonService->getById($request->id);
         return response()->json([
-            "data" => new LessonCollection($this->lessonService->getById($request->ids))
+            "data" => $data ? new LessonCollection($data) : null
         ]);
     }
 
@@ -48,7 +49,7 @@ class LessonController extends Controller
         if($request->type === "timeout"){
             $data = $this->lessonService->preparePracticeTimeout($id);
         }else{
-            $data = new LessonResource($this->lessonService->getById($id)->load("vocabularies"));
+            $data = new LessonResource($this->lessonService->getById($id));
         }
         return response()->json([
             "data" => $data

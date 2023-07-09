@@ -26,11 +26,11 @@ Route::middleware(['auth:api'])->group(function () {
     Route::resource('practice', PracticeController::class);
     Route::resource('submit', PracticeSubmit::class);
     Route::resource('student', StudentController::class)->middleware(EnsureTokenStudent::class);
-    Route::resource('lesson', LessonController::class);
     Route::resource('vocabulary', VocabularyController::class);
     Route::resource('result', ResultController::class);
     Route::prefix('lesson')->group(function (){
         Route::get('/getDetailList', [LessonController::class,'getDetailList']);
     });
+    Route::resource('lesson', LessonController::class);
 
 });
