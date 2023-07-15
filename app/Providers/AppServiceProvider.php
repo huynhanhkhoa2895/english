@@ -10,7 +10,9 @@ use App\Interface\VocabularyInterface;
 use App\Interface\ZipInterface;
 use App\Interface\StudentInterface;
 use App\Interface\ResultInterface;
+use App\Interface\InterviewQuestionInterface;
 use App\Services\LessonService;
+use App\Services\InterviewQuestionService;
 use App\Services\PracticeService;
 use App\Services\SubmitService;
 use App\Services\VocabularyService;
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StudentInterface::class, StudentService::class);
         $this->app->bind(ResultInterface::class, ResultService::class);
         $this->app->bind(SubmitInterface::class, SubmitService::class);
+        $this->app->bind(InterviewQuestionInterface::class, InterviewQuestionService::class);
 
     }
 

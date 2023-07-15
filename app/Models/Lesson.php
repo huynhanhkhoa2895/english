@@ -33,5 +33,9 @@ class Lesson extends Model
         return $this->belongsToMany(Student::class)->withPivot("lesson_id");
     }
 
+    public function interviewQuestions(): BelongsToMany
+    {
+        return $this->belongsToMany(InterviewQuestion::class,"lesson_interview_question")->withPivot("lesson_id");
+    }
 
 }

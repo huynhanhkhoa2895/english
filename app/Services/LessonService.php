@@ -28,9 +28,9 @@ class LessonService implements LessonInterface
     {
         try{
             if(is_array($id)){
-                return $this->repo->getAllWithId($id)->load("vocabularies");
+                return $this->repo->getAllWithId($id)->load("vocabularies")->load("interviewQuestions");
             }else{
-                return $this->repo->find($id)->load("vocabularies");
+                return $this->repo->find($id)->load("vocabularies")->load("interviewQuestions");
             }
         }catch (Exception $exception) {
             Log::error("LessonService: attachVocabulary - ".$exception->getMessage());

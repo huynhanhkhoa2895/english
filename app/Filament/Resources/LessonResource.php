@@ -57,6 +57,7 @@ class LessonResource extends Resource
     {
         return [
             RelationManagers\VocabulariesRelationManager::class,
+            RelationManagers\InterviewQuestionRelationManager::class,
             RelationManagers\StudentsRelationManager::class,
         ];
     }
