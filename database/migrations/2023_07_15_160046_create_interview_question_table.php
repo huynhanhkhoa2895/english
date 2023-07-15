@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('interview_question', function (Blueprint $table) {
             $table->id();
             $table->string("question");
-            $table->string("answer");
+            $table->longText("answer");
             $table->json("tags");
             $table->timestamps();
         });
