@@ -9,11 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Laravel\Scout\Searchable;
 
 class Vocabulary extends Model implements HasMedia
 {
-    use InteractsWithMedia,Searchable;
+    use InteractsWithMedia;
     use HasFactory;
     protected $table = "vocabulary";
     protected $casts = [
@@ -80,33 +79,5 @@ class Vocabulary extends Model implements HasMedia
         $this
             ->addMediaConversion('image')
             ->nonQueued();
-    }
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array<string, mixed>
-     */
-    public function toSearchableArray(): array
-    {
-        $array = $this->toArray();
-
-        // Customize the data array...
-
-        return $array;
-    }
-    /**
-     * Get the value used to index the model.
-     */
-    public function getScoutKey(): mixed
-    {
-        return $this->vocabulary;
-    }
-
-    /**
-     * Get the key name used to index the model.
-     */
-    public function getScoutKeyName(): mixed
-    {
-        return 'vocabulary';
     }
 }
