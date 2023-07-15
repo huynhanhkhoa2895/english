@@ -36,6 +36,14 @@ return [
             'throw' => false,
         ],
 
+        'interview' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/interview'),
+            'url' => env('APP_URL').'/storage/interview',
+            'throw' => false,
+            'visibility' => 'public',
+        ],
+
         'speech' => [
             'driver' => 'local',
             'root' => storage_path('app/public/speech'),

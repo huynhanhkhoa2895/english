@@ -7,14 +7,10 @@ use App\Imports\VocabularyImport;
 use App\Exports\VocabularyExport;
 use App\Interface\VocabularyInterface;
 use App\Interface\ZipInterface;
+use App\Interface\GoogleInterface;
 use App\Repositories\VocabularyRelationshipRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\Vocabulary;
-use Google\Cloud\TextToSpeech\V1\AudioConfig;
-use Google\Cloud\TextToSpeech\V1\AudioEncoding;
-use Google\Cloud\TextToSpeech\V1\SynthesisInput;
-use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
-use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +22,7 @@ use Excel;
 class VocabularyService implements VocabularyInterface
 {
 
-    function __construct(private readonly VocabularyRepository $repo, protected ZipInterface $zipService, protected VocabularyRelationshipRepository $repoVocabularyRelationship){
+    function __construct(private readonly VocabularyRepository $repo, protected GoogleInterface $googleService, protected ZipInterface $zipService, protected VocabularyRelationshipRepository $repoVocabularyRelationship){
 
     }
 
@@ -63,7 +59,7 @@ class VocabularyService implements VocabularyInterface
                     $useGoogle = !$this->callApiDictionary($text);
                 }
                 if($useGoogle){
-                    $this->callApiGoogle($text);
+                    $this->googleService->callApiGoogle($text,$text,"speech");
                 }
             }
             return $text.'.mp3';
@@ -95,34 +91,6 @@ class VocabularyService implements VocabularyInterface
             return Storage::disk('speech')->put($text.".mp3", $contents);
         } catch (Exception $exception){
             Log::error("VocabularyService: callApiDictionary - ".$exception->getMessage());
-            return false;
-        }
-    }
-
-    private function callApiGoogle(string $text): bool
-    {
-        try {
-            $textToSpeechClient = new TextToSpeechClient([
-                'credentials' => storage_path("app/english-381805-2094589455c0.json"),
-                'keyFilename' => storage_path("app/english-381805-2094589455c0.json"),
-                'projectId' => 'english-381805'
-            ]);
-
-            $input = new SynthesisInput();
-            $input->setText($text);
-            $voice = new VoiceSelectionParams();
-            $voice->setLanguageCode('en-US');
-            $audioConfig = new AudioConfig();
-            $audioConfig->setAudioEncoding(AudioEncoding::MP3);
-
-            $resp = $textToSpeechClient->synthesizeSpeech($input, $voice, $audioConfig);
-            $result = (bool) Storage::disk('speech')->put($text.'.mp3', $resp->getAudioContent());
-            if(!$result) {
-                return false;
-            }
-            return true;
-        } catch (Exception $exception){
-            Log::error("VocabularyService: callApiGoogle - ".$exception->getMessage());
             return false;
         }
     }

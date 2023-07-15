@@ -11,9 +11,11 @@ use App\Interface\ZipInterface;
 use App\Interface\StudentInterface;
 use App\Interface\ResultInterface;
 use App\Interface\InterviewQuestionInterface;
+use App\Interface\GoogleInterface;
 use App\Services\LessonService;
 use App\Services\InterviewQuestionService;
 use App\Services\PracticeService;
+use App\Services\GoogleService;
 use App\Services\SubmitService;
 use App\Services\VocabularyService;
 use App\Services\ZipService;
@@ -32,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->bind(GoogleInterface::class, GoogleService::class);
         $this->app->bind(VocabularyInterface::class, VocabularyService::class);
         $this->app->bind(LessonInterface::class, LessonService::class);
         $this->app->bind(ZipInterface::class, ZipService::class);

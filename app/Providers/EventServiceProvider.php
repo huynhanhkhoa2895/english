@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\InterviewQuestion;
 use App\Models\Vocabulary;
 use App\Observers\VocabularyObserver;
+use App\Observers\InterviewQuestionObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
     {
         //
         Vocabulary::observe(VocabularyObserver::class);
+        InterviewQuestion::observe(InterviewQuestionObserver::class);
     }
 
     /**
