@@ -27,6 +27,7 @@ class GoogleService implements GoogleInterface{
             $input->setText($text);
             $voice = new VoiceSelectionParams();
             $voice->setLanguageCode('en-US');
+            $voice->setCustomVoice();
             $audioConfig = new AudioConfig();
             $audioConfig->setAudioEncoding(AudioEncoding::MP3);
 
