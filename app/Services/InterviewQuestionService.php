@@ -26,9 +26,13 @@ class InterviewQuestionService implements InterviewQuestionInterface
     {
         try {
             $nameFile = Str::slug($interviewQuestion->question);
+            if(!empty($interviewQuestion->question)){
+                $this->googleService->callApiGoogle($interviewQuestion->question ?? "",$nameFile."-question","interview");
+                return $nameFile."-question".'.mp3';
+            }
             if(!empty($interviewQuestion->answer)){
-                $this->googleService->callApiGoogle($interviewQuestion->answer ?? "",$nameFile,"interview");
-                return $nameFile.'.mp3';
+                $this->googleService->callApiGoogle($interviewQuestion->answer ?? "",$nameFile."-answer","interview");
+                return $nameFile."-answer".'.mp3';
             }
             return false;
         } catch (Exception $exception) {
