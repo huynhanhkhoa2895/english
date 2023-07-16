@@ -19,6 +19,7 @@ class InterviewQuestionResource extends JsonResource
             "answer" => $this->answer,
             "question" => $this->question,
             "tags" => $this->tags,
+            "sound" => $this->sound,
         ];
     }
 }

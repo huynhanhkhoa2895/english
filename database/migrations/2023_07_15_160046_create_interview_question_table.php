@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("question");
             $table->longText("answer");
             $table->json("tags");
+            $table->string("sound");
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use App\Models\InterviewQuestion;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\InterviewQuestionRepository;
+use Illuminate\Support\Facades\Storage;
 use Str;
 
 class InterviewQuestionService implements InterviewQuestionInterface
@@ -26,15 +27,15 @@ class InterviewQuestionService implements InterviewQuestionInterface
     {
         try {
             $nameFile = Str::slug($interviewQuestion->question);
-            if(!empty($interviewQuestion->question)){
-                $this->googleService->callApiGoogle($interviewQuestion->question ?? "",$nameFile."-question","interview");
-                return $nameFile."-question".'.mp3';
+            if(!Storage::disk('speech')->exists($nameFile."-question".'.mp3')){
+                if(!empty($interviewQuestion->question)){
+                    $this->googleService->callApiGoogle($interviewQuestion->question ?? "",$nameFile."-question","interview");
+                    return $nameFile."-question".'.mp3';
+                }
+                return false;
             }
-//            if(!empty($interviewQuestion->answer)){
-//                $this->googleService->callApiGoogle($interviewQuestion->answer ?? "",$nameFile."-answer","interview");
-//                return $nameFile."-answer".'.mp3';
-//            }
-            return false;
+            return $nameFile."-question".'.mp3';
+
         } catch (Exception $exception) {
             Log::error("InterviewQuestionService: textToSpeach - ".$exception->getMessage());
             return false;
