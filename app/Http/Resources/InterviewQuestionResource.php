@@ -16,7 +16,7 @@ class InterviewQuestionResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "name" => $this->name,
+            "answer" => $this->answer,
             "question" => $this->question,
             "tags" => $this->tags,
         ];
