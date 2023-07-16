@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class InterviewQuestionResource extends Resource
 {
@@ -26,7 +27,10 @@ class InterviewQuestionResource extends Resource
         return $form
             ->schema([
                 MarkdownEditor::make('question')->columnSpanFull()->required(),
-                MarkdownEditor::make('answer')->columnSpanFull()->required(),
+                TinyEditor::make('answer')
+                    ->required()
+                    ->columnSpanFull()
+                    ->required(),
                 Select::make('tags')
                     ->options([
                         'html' => 'HTML',

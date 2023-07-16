@@ -4,13 +4,19 @@ namespace App\Observers;
 
 use App\Interface\InterviewQuestionInterface;
 use App\Models\InterviewQuestion;
+use Storage;
+use Str;
 
 class InterviewQuestionObserver
 {
     public function saved(InterviewQuestion $interviewQuestion): void
     {
         $interviewQuestionService = app(InterviewQuestionInterface::class);
-        $interviewQuestionService->textToSpeach($interviewQuestion);
+        $nameFile = Str::slug($interviewQuestion->question);
+        if(!Storage::disk('interview')->exists($nameFile.'.mp3')){
+            $interviewQuestionService->textToSpeach($interviewQuestion);
+        }
+
     }
     /**
      * Handle the InterviewQuestion "created" event.
