@@ -30,7 +30,7 @@ class InterviewQuestionRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('question'),
+                Tables\Columns\TextColumn::make('question')->limit(50),
                 Tables\Columns\TextColumn::make('tags'),
             ])
             ->filters([

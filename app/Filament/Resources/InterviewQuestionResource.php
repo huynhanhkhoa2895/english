@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InterviewQuestionResource\Pages;
 use App\Filament\Resources\InterviewQuestionResource\RelationManagers;
 use App\Models\InterviewQuestion;
+use App\Models\Lesson;
 use Filament\Forms;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
@@ -13,7 +14,10 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Collection;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class InterviewQuestionResource extends Resource
@@ -38,6 +42,7 @@ class InterviewQuestionResource extends Resource
                         'javascript' => 'Javascript',
                         'css' => 'CSS',
                         'laravel' => 'Laravel',
+                        'hr' => 'HR',
                     ])
                     ->multiple(),
             ]);
@@ -47,17 +52,37 @@ class InterviewQuestionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('question')->sortable(),
+                TextColumn::make('question')->limit(50),
                 TextColumn::make('tags'),
             ])
             ->filters([
-                //
+                SelectFilter::make('parts_of_speech')
+                    ->options([
+                        'html' => 'HTML',
+                        'react' => 'React',
+                        'javascript' => 'Javascript',
+                        'css' => 'CSS',
+                        'laravel' => 'Laravel',
+                        'hr' => 'HR',
+                    ])->multiple(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                BulkAction::make('attachLesson')
+                    ->action(function (Collection $records, array $data): void {
+                        foreach ($records as $record) {
+                            $record->lessons()->syncWithoutDetaching($data['lessonId']);
+                        }
+                    })
+                    ->form([
+                        Forms\Components\Select::make('lessonId')
+                            ->label('Lesson')
+                            ->options(Lesson::query()->pluck('name', 'id'))
+                            ->required(),
+                    ]),
             ]);
     }
 
