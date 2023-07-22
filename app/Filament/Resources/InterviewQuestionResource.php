@@ -56,7 +56,7 @@ class InterviewQuestionResource extends Resource
                 TextColumn::make('tags'),
             ])
             ->filters([
-                SelectFilter::make('parts_of_speech')
+                SelectFilter::make('tags')
                     ->options([
                         'html' => 'HTML',
                         'react' => 'React',
