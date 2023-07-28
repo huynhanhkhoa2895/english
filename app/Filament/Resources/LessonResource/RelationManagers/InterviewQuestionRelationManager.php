@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources\LessonResource\RelationManagers;
 
+use App\Filament\Resources\InterviewQuestionResource;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class InterviewQuestionRelationManager extends RelationManager
 {
@@ -41,11 +41,15 @@ class InterviewQuestionRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make("view")->action(function (Model $record): mixed {
+                    $resource = InterviewQuestionResource::class;
+                    return redirect($resource::getUrl('edit',[$record->id]));
+                }),
+                Tables\Actions\DetachAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DetachBulkAction::make(),
             ]);
     }
 }

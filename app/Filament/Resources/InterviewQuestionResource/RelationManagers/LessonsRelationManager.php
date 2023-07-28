@@ -37,11 +37,9 @@ class LessonsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make(),
-                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
