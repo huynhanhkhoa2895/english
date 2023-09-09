@@ -23,11 +23,18 @@ abstract class BaseRepository
 
     /**
      * @param $col
+     * @param $sort
      * @return \Illuminate\Support\Collection
      */
-    public function getAll($col = ['*'])
+    public function getAll($col = ['*'],$sort = null)
     {
-        return $this->model->get($col);
+        if(empty($sort)) {
+            $sort = [
+                "field" => "id",
+                "direction" => "desc"
+            ];
+        }
+        return $this->model->orderBy($sort['field'],$sort['direction'])->get($col);
     }
 
     /**
