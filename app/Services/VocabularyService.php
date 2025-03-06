@@ -51,16 +51,22 @@ class VocabularyService implements VocabularyInterface
     public function textToSpeach(string $text): string|false
     {
         try {
+
             if(!Storage::disk('speech')->exists($text.'.mp3')){
-                $useGoogle = false;
-                if(count(explode(" ",$text))>1){
-                    $useGoogle = true;
-                }else{
-                    $useGoogle = !$this->callApiDictionary($text);
-                }
-                if($useGoogle){
-                    $this->googleService->callApiGoogle($text,$text,"speech");
-                }
+                $useGoogle = !$this->callApiDictionary($text);
+                // if(!$useGoogle){
+                //     $this->callApiLaban($text);
+                // }
+                
+                // $useGoogle = false;
+                // if(count(explode(" ",$text))>1){
+                //     $useGoogle = true;
+                // }else{
+                //     $useGoogle = !$this->callApiDictionary($text);
+                // }
+                // if($useGoogle){
+                //     $this->googleService->callApiGoogle($text,$text,"speech");
+                // }
             }
             return $text.'.mp3';
 
@@ -88,8 +94,24 @@ class VocabularyService implements VocabularyInterface
                 }
             }
             $contents = file_get_contents($url.$dataSrc);
+            dd($text,$contents);
             return Storage::disk('speech')->put($text.".mp3", $contents);
         } catch (Exception $exception){
+            dd($exception);
+            Log::error("VocabularyService: callApiDictionary - ".$exception->getMessage());
+            return false;
+        }
+    }
+
+    private function callApiLaban(string $text): bool{
+        try {
+            $url = "https://dict.laban.vn/ajax/getsound?accent=us&word=";
+            $response = Http::get($url.''.$text);
+            $body = $response->body();
+            dd($body);
+            // return Storage::disk('speech')->put($text.".mp3", $contents);
+        } catch (Exception $exception){
+            dd($exception);
             Log::error("VocabularyService: callApiDictionary - ".$exception->getMessage());
             return false;
         }
