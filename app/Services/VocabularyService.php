@@ -53,7 +53,7 @@ class VocabularyService implements VocabularyInterface
         try {
 
             if(!Storage::disk('speech')->exists($text.'.mp3')){
-                $useGoogle = !$this->callApiDictionary($text);
+                $useGoogle = !$this->callApiLaban($text);
                 // if(!$useGoogle){
                 //     $this->callApiLaban($text);
                 // }
@@ -108,8 +108,14 @@ class VocabularyService implements VocabularyInterface
             $url = "https://dict.laban.vn/ajax/getsound?accent=us&word=";
             $response = Http::get($url.''.$text);
             $body = $response->body();
-            dd($body);
-            // return Storage::disk('speech')->put($text.".mp3", $contents);
+            if($body) {
+                $body = json_decode($body);
+            }
+            if($body->data) {
+                $contents = file_get_contents($body->data);
+                return Storage::disk('speech')->put($text.".mp3", $contents);
+            }
+            return false;
         } catch (Exception $exception){
             dd($exception);
             Log::error("VocabularyService: callApiDictionary - ".$exception->getMessage());
