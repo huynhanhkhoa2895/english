@@ -53,10 +53,10 @@ class VocabularyService implements VocabularyInterface
         try {
 
             if(!Storage::disk('speech')->exists($text.'.mp3')){
-                $useGoogle = !$this->callApiLaban($text);
-                // if(!$useGoogle){
-                //     $this->callApiLaban($text);
-                // }
+                $useGoogle = !$this->callApiDictionary($text);
+                if(!$useGoogle){
+                    $this->callApiLaban($text);
+                }
                 
                 // $useGoogle = false;
                 // if(count(explode(" ",$text))>1){
@@ -81,7 +81,9 @@ class VocabularyService implements VocabularyInterface
     {
         try {
             $url = "https://dictionary.cambridge.org";
-            $response = Http::get($url."/dictionary/english/".$text);
+            $response = Http::withHeaders([
+                "User-Agent"=> "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36"
+            ])->get($url."/dictionary/english/".$text);
             $body = $response->body();
             $pattern = '/<source [^>]*src="(.+)/';
             preg_match_all($pattern,$body,$src);
@@ -94,7 +96,6 @@ class VocabularyService implements VocabularyInterface
                 }
             }
             $contents = file_get_contents($url.$dataSrc);
-            dd($text,$contents);
             return Storage::disk('speech')->put($text.".mp3", $contents);
         } catch (Exception $exception){
             dd($exception);
