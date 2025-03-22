@@ -52,6 +52,14 @@ return [
             'visibility' => 'public',
         ],
 
+        'listening' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/listening'),
+            'url' => env('APP_URL').'/storage/listening',
+            'throw' => false,
+            'visibility' => 'public',
+        ],
+
         'excel' => [
             'driver' => 'local',
             'root' => storage_path('app/public/excel'),
