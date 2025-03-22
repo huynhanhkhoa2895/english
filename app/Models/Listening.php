@@ -20,6 +20,6 @@ class Listening extends Model
 
     public function lessons(): BelongsToMany
     {
-        return $this->belongsToMany(Lesson::class,"lesson_listening")->withPivot("lesson_listening_id");
+        return $this->belongsToMany(Lesson::class,"lesson_listening")->withPivot("listening_id");
     }
 }
