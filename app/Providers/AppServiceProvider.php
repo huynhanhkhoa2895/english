@@ -51,8 +51,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // URL::forceScheme('https');
-        //
+        if (env('APP_HTTPS')) {
+            URL::forceScheme('https');
+        }
         Filament::serving(function () {
             Filament::registerStyles([
                 'resources/css/app.css',
