@@ -53,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if (env('APP_HTTPS')) {
             URL::forceScheme('https');
+            $this->app['request']->server->set('HTTPS','on');
         }
         Filament::serving(function () {
             Filament::registerStyles([
