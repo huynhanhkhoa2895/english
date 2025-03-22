@@ -14,4 +14,5 @@ interface VocabularyInterface{
     function validateVocabulary(string $vocabulary,string $part_of_speech, string|null $id): bool;
     function exportExcel(Collection $models, array $cols): BinaryFileResponse|false;
     function getNextPreviousVocabulary(Vocabulary $vocabulary,string $type = "next") : Vocabulary|false;
+    function createVocabulary(Vocabulary $vocabulary) : Vocabulary|false;
 }

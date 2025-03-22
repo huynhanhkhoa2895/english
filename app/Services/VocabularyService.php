@@ -57,7 +57,7 @@ class VocabularyService implements VocabularyInterface
                 if(!$useGoogle){
                     $this->callApiLaban($text);
                 }
-                
+
                 // $useGoogle = false;
                 // if(count(explode(" ",$text))>1){
                 //     $useGoogle = true;
@@ -172,7 +172,6 @@ class VocabularyService implements VocabularyInterface
             Log::error("VocabularyService: validateVocabulary - ".$exception->getMessage());
             return false;
         }
-        return false;
     }
 
     function syncRelationship(string $idVocabulary1,string $idVocabulary2,string $relationship): bool
@@ -202,6 +201,16 @@ class VocabularyService implements VocabularyInterface
             Log::error("VocabularyService: syncRelationship - ".$exception->getMessage());
             return false;
         }
-        return false;
+    }
+
+    function createVocabulary(Vocabulary $vocabulary): Vocabulary|false
+    {
+        try {
+            return $this->repo->create([$vocabulary]);
+        } catch (Exception $exception) {
+            Log::error("VocabularyService: createVocabulary - ".$exception->getMessage());
+            return false;
+        }
+
     }
 }

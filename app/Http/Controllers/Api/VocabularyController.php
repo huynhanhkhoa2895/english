@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VocabularyRequest;
 use App\Interface\VocabularyInterface;
 use App\Models\Vocabulary;
 use Illuminate\Http\Request;
@@ -30,12 +31,25 @@ class VocabularyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(VocabularyRequest $request)
     {
-        $data = Vocabulary::create([
-            'vocabulary'     => 'test',
-            'translate'    => '',
+        if (!$request->validated()){
+            return response()->json(["status" => false]);
+        }
+        $req = $request->all();
+        $vocabulary = new Vocabulary([
+            "vocabulary" => $req['vocabulary'],
+            "translate" => $req['translate'],
+            "spelling" => $req['spelling'],
+            "parts_of_speech" => $req['parts_of_speech'],
+            "priority" => $req['priority'],
+            "level" => $req['level'],
         ]);
+        $data = $this->vocabularyService->createVocabulary($vocabulary);
+        if (!$data){
+            return response()->json(["status" => false]);
+        }
+
         return response()->json(["status" => true]);
     }
 
