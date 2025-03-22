@@ -35,7 +35,7 @@ class ListeningResource extends Resource
                     ->acceptedFileTypes(['audio/mpeg'])
                     ->maxSize(1000000)
                     ->getUploadedFileNameForStorageUsing(function (Closure $get): string {
-                        return  $get('name')."_".now().".mp3";
+                        return  "listening_".now().".mp3";
                     })
                     ->enableDownload()
             ]);
