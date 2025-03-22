@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string("name");
             $table->string("sound")->nullable();
             $table->text("script")->nullable();
-            $table->foreignId('lesson_id')->constrained('lesson')->onDelete('cascade');
             $table->timestamps();
         });
     }
