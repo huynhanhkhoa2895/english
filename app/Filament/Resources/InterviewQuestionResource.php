@@ -83,7 +83,8 @@ class InterviewQuestionResource extends Resource
                             ->options(Lesson::query()->pluck('name', 'id'))
                             ->required(),
                     ]),
-            ]);
+            ])
+            ->defaultSort('id','desc');;
     }
 
     public static function getRelations(): array
